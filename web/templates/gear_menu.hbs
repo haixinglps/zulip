@@ -1,6 +1,6 @@
 <ul class="nav" role="navigation">
     <li class="dropdown actual-dropdown-menu" id="gear-menu">
-        <a id="settings-dropdown" tabindex="0" role="button" class="dropdown-toggle tippy-zulip-delayed-tooltip" data-target="nada" data-toggle="dropdown" data-tooltip-template-id="gear-menu-tooltip-template" aria-label="{{t 'Main menu'}}">
+        <a id="settings-dropdown" tabindex="0" role="button" class="dropdown-toggle tippy-zulip-delayed-tooltip" data-target="nada" data-toggle="dropdown" data-tooltip-template-id="gear-menu-tooltip-template">
             <i class="fa fa-cog settings-dropdown-cog" aria-hidden="true"></i>
         </a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="settings-dropdown">
@@ -59,14 +59,14 @@
                     <span>{{t 'Organization settings' }}</span>
                 </a>
             </li>
-            {{#unless is_guest}}
-            <li class="hidden-for-spectators" role="presentation">
-                <a href="/stats" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                    <span>{{t 'Usage statistics' }}</span>
-                </a>
-            </li>
-            {{/unless}}
+            {{#if is_admin}}
+                <li class="hidden-for-spectators" role="presentation">
+                    <a href="/stats" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                        <span>{{t 'Usage statistics' }}</span>
+                    </a>
+                </li>
+            {{/if}}
             <li role="presentation" class="only-visible-for-spectators">
                 <a class="change-language-spectator" role="menuitem">
                     <i class="zulip-icon zulip-icon-language" aria-hidden="true"></i> {{t 'Select language' }}
@@ -104,12 +104,14 @@
                 </a>
             </li>
             <li class="divider only-visible-for-spectators" role="presentation"></li>
-            <li role="presentation" id="gear_menu_about_zulip">
-                <a href="#about-zulip" role="menuitem" class="menuitem-version">
-                    <span class="white_zulip_icon_without_text"></span>
-                    <span class="about_zulip_text">{{t "About Zulip" }}</span>
-                </a>
-            </li>
+            {{#if is_admin}}
+                <li role="presentation" id="gear_menu_about_zulip">
+                    <a href="#about-zulip" role="menuitem" class="menuitem-version">
+                        <span class="white_zulip_icon_without_text"></span>
+                        <span class="about_zulip_text">{{t "About Zulip" }}</span>
+                    </a>
+                </li>
+            {{/if}}
             {{#if corporate_enabled}}
             <li role="presentation">
                 <a href="/help/contact-support" target="_blank" rel="noopener noreferrer" role="menuitem">
@@ -117,42 +119,44 @@
                 </a>
             </li>
             {{/if}}
-            <li class="divider" role="presentation"></li>
-            <li role="presentation" class="hidden-for-spectators">
-                <a href="{{ apps_page_url }}" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-desktop" aria-hidden="true"></i> {{t 'Desktop & mobile apps' }}
-                </a>
-            </li>
-            <li role="presentation" class="hidden-for-spectators">
-                <a href="/integrations/" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-github" aria-hidden="true"></i> {{t 'Integrations' }}
-                </a>
-            </li>
-            <li role="presentation" class="hidden-for-spectators">
-                <a href="/api" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-sitemap" aria-hidden="true"></i> {{t 'API documentation' }}
-                </a>
-            </li>
-            {{#if show_billing}}
-            <li role="presentation" class="hidden-for-spectators">
-                <a href="/billing/" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-credit-card" aria-hidden="true"></i> {{t 'Billing' }}
-                </a>
-            </li>
-            {{/if}}
-            {{#if promote_sponsoring_zulip}}
-            <li role="presentation" class="hidden-for-spectators">
-                <a href="https://zulip.com/help/support-zulip-project" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-heart" aria-hidden="true"></i> {{t 'Support Zulip' }}
-                </a>
-            </li>
-            {{/if}}
-            {{#if show_plans}}
-            <li role="presentation" class="hidden-for-spectators">
-                <a href="/plans/" target="_blank" rel="noopener noreferrer" role="menuitem">
-                    <i class="fa fa-rocket" aria-hidden="true"></i> {{t 'Plans and pricing' }}
-                </a>
-            </li>
+            {{#if is_admin}}
+                <li class="divider" role="presentation"></li>
+                <li role="presentation" class="hidden-for-spectators">
+                    <a href="{{ apps_page_url }}" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-desktop" aria-hidden="true"></i> {{t 'Desktop & mobile apps' }}
+                    </a>
+                </li>
+                <li role="presentation" class="hidden-for-spectators">
+                    <a href="/integrations/" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-github" aria-hidden="true"></i> {{t 'Integrations' }}
+                    </a>
+                </li>
+                <li role="presentation" class="hidden-for-spectators">
+                    <a href="/api" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-sitemap" aria-hidden="true"></i> {{t 'API documentation' }}
+                    </a>
+                </li>
+                {{#if show_billing}}
+                <li role="presentation" class="hidden-for-spectators">
+                    <a href="/billing/" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-credit-card" aria-hidden="true"></i> {{t 'Billing' }}
+                    </a>
+                </li>
+                {{/if}}
+                {{#if promote_sponsoring_zulip}}
+                <li role="presentation" class="hidden-for-spectators">
+                    <a href="https://zulip.com/help/support-zulip-project" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-heart" aria-hidden="true"></i> {{t 'Support Zulip' }}
+                    </a>
+                </li>
+                {{/if}}
+                {{#if show_plans}}
+                <li role="presentation" class="hidden-for-spectators">
+                    <a href="/plans/" target="_blank" rel="noopener noreferrer" role="menuitem">
+                        <i class="fa fa-rocket" aria-hidden="true"></i> {{t 'Plans and pricing' }}
+                    </a>
+                </li>
+                {{/if}}
             {{/if}}
             <li class="divider hidden-for-spectators" role="presentation"></li>
             {{#if can_invite_others_to_realm}}
