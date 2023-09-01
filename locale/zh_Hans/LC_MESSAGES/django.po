@@ -1738,7 +1738,7 @@ msgstr "<a href=\"%(narrow_url)s\">查看或回复 %(realm_name)s Zulip</a>，�
 msgid ""
 "<a href=\"%(narrow_url)s\">Reply in %(realm_name)s Zulip</a>, or <a "
 "href=\"%(notif_url)s\">manage email preferences</a>."
-msgstr "<a href=\"%(窄带url)s\">回复在%(realm_name)s Zulip</a>，或<a href=\"%(notif_url)s\">管理电子邮件偏好</a>。"
+msgstr "<a href=\"%(narrow_url)s\">回复在%(realm_name)s Zulip</a>，或<a href=\"%(notif_url)s\">管理电子邮件偏好</a>。"
 
 #: templates/zerver/emails/missed_message.html:44
 #, python-format
@@ -1756,7 +1756,7 @@ msgstr "与%(huddle_display_name)s的群组私信"
 #: templates/zerver/emails/missed_message.subject.txt:3
 #, python-format
 msgid "DMs with %(sender_str)s"
-msgstr "与%(huddle_display_name)s的私信"
+msgstr "与%(sender_str)s的私信"
 
 #: templates/zerver/emails/missed_message.subject.txt:12
 #, python-format
