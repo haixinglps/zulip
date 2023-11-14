@@ -65,6 +65,16 @@
                                 <div id="avatar" {{#if user_is_guest}} class="guest-avatar" {{/if}}
                                   style="background-image: url('{{user_avatar}}');">
                                 </div>
+                                {{#if groups_of_user.length}}
+                                <div id="default-section">
+                                    <div class="default-field">
+                                        <div class="name">{{t "User groups" }}</div>
+                                        {{#each groups_of_user}}
+                                            <div class="value">{{this.description}}</div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                                {{/if}}
                             </div>
                         </div>
                         <div class="bottom">

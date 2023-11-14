@@ -168,5 +168,16 @@
                 <i class="fa fa-paper-plane" aria-hidden="true"></i> {{t "View messages sent" }}
             </a>
         </li>
+        {{#if groups_of_user.length}}
+        <hr />
+        <li>
+            <b>{{t "User groups" }}</b>
+        </li>
+        {{#each groups_of_user}}
+            <li>
+                {{this.description}}
+            </li>
+        {{/each}}
+        {{/if}}
     {{/unless}}
 </ul>

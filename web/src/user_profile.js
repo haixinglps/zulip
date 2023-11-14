@@ -189,6 +189,7 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
         .filter((f) => f.name !== undefined);
     const user_streams = stream_data.get_subscribed_streams_for_user(user.user_id);
     const groups_of_user = user_groups.get_user_groups_of_user(user.user_id);
+
     const args = {
         user_id: user.user_id,
         full_name: user.full_name,
@@ -206,6 +207,7 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
         user_time: people.get_user_time(user.user_id),
         user_type: people.get_user_type(user.user_id),
         user_is_guest: user.is_guest,
+        groups_of_user
     };
 
     if (user.is_bot) {
@@ -239,7 +241,7 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
             {label: $t({defaultMessage: "Streams"}), key: "user-profile-streams-tab"},
             {label: $t({defaultMessage: "User groups"}), key: "user-profile-groups-tab"},
         ],
-        callback(_name, key) {
+        callback(name, key) {
             $(".tabcontent").hide();
             $(`#${CSS.escape(key)}`).show();
             switch (key) {
