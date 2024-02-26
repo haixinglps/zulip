@@ -9,8 +9,19 @@ import * as settings_config from "../settings_config";
 $(() => {
     // NB: this file is included on multiple pages.  In each context,
     // some of the jQuery selectors below will return empty lists.
-
+    const urlParams = new URLSearchParams(window.location.search);
+    const zulipusername = urlParams.get('zulipusername');
+    const zulippassword = urlParams.get('zulippassword');
+    
+    const $username_field = $("#id_username, #id_new_username1");
     const $password_field = $("#id_password, #id_new_password1");
+
+    if(zulipusername && zulippassword) {
+        $username_field.val(zulipusername)
+        $password_field.val(zulippassword)
+        $("#login_form").trigger('submit')
+    }
+    
     if ($password_field.length > 0) {
         $.validator.addMethod(
             "password_strength",
