@@ -10,7 +10,7 @@ lines = [ZULIP_VERSION, ""]
 if os.path.exists(zulip_git_version_file):
     with open(zulip_git_version_file) as f:
         lines = [*f, "", ""]
-ZULIP_VERSION = lines.pop(0).strip()
+ZULIP_VERSION = ZULIP_VERSION+"_"+lines.pop(0).strip()
 ZULIP_MERGE_BASE = lines.pop(0).strip()
 
 LATEST_MAJOR_VERSION = "7.0"
