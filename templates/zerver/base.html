@@ -1,3 +1,11 @@
+<!--
+ * @Author: 杨凯 646423353@qq.com
+ * @Date: 2024-02-27 14:58:08
+ * @LastEditors: 杨凯 646423353@qq.com
+ * @LastEditTime: 2024-04-09 18:38:48
+ * @FilePath: /zulip/templates/zerver/base.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <!DOCTYPE html>
 <html lang='{{LANGUAGE_CODE}}' {% if color_scheme == 1 %} class="color-scheme-automatic" {% elif color_scheme == 2 %} class="dark-theme" {% endif %}>
 
@@ -14,8 +22,8 @@
                 {% endif %}
             {% endif %}
         {% endblock %}
-        <link id="favicon" rel="icon" href="{{ static('images/favicon.svg') }}?v=4" />
-        <link rel="alternate icon" href="{{ static('images/favicon.png') }}?v=4" />
+        <link id="favicon" rel="icon" href="{{ static('images/favicon.ico') }}?v=4" />
+        <link rel="alternate icon" href="{{ static('images/favicon.ico') }}?v=4" />
         {% block meta_viewport %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {% endblock %}
