@@ -1,2 +1,11 @@
 <div class="popover-avatar{{#if user_is_guest}} guest-avatar{{/if}}" style="background-image: url('{{user_avatar}}');" >
+{{#if groups_of_user.length}}
+<ul class="popover-avatar-groups">
+    {{#each groups_of_user}}
+        <li>
+            {{this.description}}
+        </li>
+    {{/each}}
+</ul>
+{{/if}}
 </div>

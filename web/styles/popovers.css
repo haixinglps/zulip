@@ -368,6 +368,23 @@ ul {
     .popover-inner {
         width: 240px;
     }
+
+    .popover-avatar-groups {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        padding: 5px 10px;
+        background-color: hsla(0deg 0% 0% /50%);
+        white-space: nowrap;
+        list-style: none;
+        border-radius: 0 8px 0 0;
+    }
+
+    .popover-avatar-groups li {
+        text-align: left;
+        color: #efefef;
+    }
 }
 
 #user-profile-modal {

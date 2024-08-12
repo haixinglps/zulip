@@ -13,7 +13,7 @@ html {
 
 .column-middle,
 #main_div {
-    background-color: var(--color-background);
+    background-color: var(--color-background-new);
 }
 
 #app-loading.loaded {
@@ -146,6 +146,7 @@ body {
     --color-message-header-icon-non-interactive: hsl(0deg 0% 0% / 30%);
     --color-message-header-icon-interactive: hsl(0deg 0% 0%);
     --color-background: hsl(0deg 0% 94%);
+    --color-background-new: hsl(0deg 0% 100%);
     --color-background-dropdown-input: hsl(0deg 0% 100%);
     --color-background-navbar: hsl(0deg 0% 96%);
     --color-background-active-narrow-filter: hsl(202deg 56% 91%);
@@ -189,6 +190,7 @@ body {
     --color-private-message-header-border-bottom: hsl(0deg 0% 0% / 37%);
     --color-message-list-border: hsl(0deg 0% 0% / 40%);
     --color-background: hsl(0deg 0% 11%);
+    --color-background-new: hsl(0deg 0% 11%);
     --color-background-dropdown-input: hsl(225deg 6% 10%);
     --color-background-navbar: hsl(0deg 0% 13%);
     --color-background-active-narrow-filter: hsl(200deg 17% 18%);
@@ -466,7 +468,8 @@ p.n-margin {
 #userlist-toggle-button,
 .header,
 #message_view_header {
-    background-color: var(--color-background-navbar);
+    background-color: #fff;
+    /* background-color: var(--color-background-navbar); */
     box-shadow: inset 0 -1px 0 var(--color-navbar-bottom-border);
 }
 

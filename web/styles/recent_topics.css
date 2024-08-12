@@ -15,6 +15,7 @@
         border-color: hsl(0deg 0% 88%);
         border-width: 0 1px;
         border-radius: 0;
+        background-color: var(--color-background-new);
         /* To make the table span full height
          * when rows don't reach bottom of the
          * window. This makes the border span
@@ -269,7 +270,7 @@
         }
 
         & tr {
-            background-color: hsl(100deg 11% 96%);
+            /* background-color: hsl(100deg 11% 96%); */
 
             &:hover {
                 background-color: hsl(210deg 100% 97%);
