@@ -76,13 +76,22 @@ export function initialize() {
         on_escape: message_view_header.exit_search,
     });
 
-    $searchbox_form.on("compositionend", () => {
+    $searchbox_form.on("compositionstart", () => {
         // Set `is_using_input_method` to true if Enter is pressed to exit
         // the input tool popover and get the text in the search bar. Then
         // we suppress searching triggered by this Enter key by checking
         // `is_using_input_method` before searching.
         // More details in the commit message that added this line.
         is_using_input_method = true;
+    });
+
+    $searchbox_form.on("compositionend", () => {
+        // Set `is_using_input_method` to true if Enter is pressed to exit
+        // the input tool popover and get the text in the search bar. Then
+        // we suppress searching triggered by this Enter key by checking
+        // `is_using_input_method` before searching.
+        // More details in the commit message that added this line.
+        is_using_input_method = false;
     });
 
     $searchbox_form
