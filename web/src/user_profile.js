@@ -12,12 +12,14 @@ import * as components from "./components";
 import * as hash_util from "./hash_util";
 import {$t, $t_html} from "./i18n";
 import * as ListWidget from "./list_widget";
+import * as narrow from "./narrow";
 import * as overlays from "./overlays";
 import {page_params} from "./page_params";
 import * as people from "./people";
 import * as popovers from "./popovers";
 import * as settings_account from "./settings_account";
 import * as settings_bots from "./settings_bots";
+import * as settings_config from "./settings_config";
 import * as settings_profile_fields from "./settings_profile_fields";
 import * as stream_data from "./stream_data";
 import * as sub_store from "./sub_store";
@@ -189,6 +191,9 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
         .filter((f) => f.name !== undefined);
     const user_streams = stream_data.get_subscribed_streams_for_user(user.user_id);
     const groups_of_user = user_groups.get_user_groups_of_user(user.user_id);
+    const spectator_view = page_params.is_spectator;
+    const is_active = people.is_active_user_for_popover(user.user_id);
+    const is_me = people.is_my_user_id(user.user_id);
 
     const args = {
         user_id: user.user_id,
@@ -207,7 +212,18 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
         user_time: people.get_user_time(user.user_id),
         user_type: people.get_user_type(user.user_id),
         user_is_guest: user.is_guest,
-        groups_of_user
+        groups_of_user,
+        spectator_view,
+        can_send_private_message:
+            is_active &&
+            !is_me &&
+            page_params.realm_private_message_policy !==
+                settings_config.private_message_policy_values.disabled.code,
+        private_message_class: "compose_private_message",
+        pm_with_url: hash_util.pm_with_url(user.email),
+        sent_by_url: hash_util.by_sender_url(user.email),
+        user_mention_syntax: people.get_mention_syntax(user.full_name, user.user_id),
+
     };
 
     if (user.is_bot) {
@@ -282,6 +298,32 @@ export function register_click_handlers() {
         const user_id = popovers.elem_to_user_id($(e.target).parents("ul"));
         const user = people.get_by_user_id(user_id);
         show_user_profile(user);
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    $("body").on("click", ".nav-item .narrow_to_messages_sent", (e) => {
+        const user_id = popovers.elem_to_user_id($(e.target).parents("ul"));
+        const email = people.get_by_user_id(user_id).email;
+        popovers.hide_all();
+        if (overlays.is_active()) {
+            overlays.close_active();
+        }
+        narrow.by("sender", email, {trigger: "user sidebar popover"});
+        $('.modal__close').trigger('click');
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    $("body").on("click", ".nav-item .narrow_to_private_messages", (e) => {
+        const user_id = popovers.elem_to_user_id($(e.target).parents("ul"));
+        const email = people.get_by_user_id(user_id).email;
+        popovers.hide_all();
+        if (overlays.is_active()) {
+            overlays.close_active();
+        }
+        narrow.by("dm", email, {trigger: "user sidebar popover"});
+        $('.modal__close').trigger('click');
         e.stopPropagation();
         e.preventDefault();
     });

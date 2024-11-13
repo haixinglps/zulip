@@ -988,7 +988,7 @@ export class Filter {
         operator = Filter.canonicalize_operator(operator);
 
         if (operator === "search") {
-            return negated ? "exclude" : "search for";
+            return negated ? $t({defaultMessage: "exclude"}) : $t({defaultMessage: "search for"});
         }
 
         const verb = negated ? "exclude " : "";

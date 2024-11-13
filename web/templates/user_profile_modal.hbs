@@ -26,7 +26,16 @@
                     <div class="tabcontent active" id="profile-tab">
                         <div class="top">
                             <div class="col-wrap col-left">
-                                <div id="default-section">
+                                {{#if groups_of_user.length}}
+                                    <div class="default-field" style="margin-bottom: 10px;">
+                                        <div class="name">认证</div>
+                                        {{!-- <div class="name">{{t "User groups" }}</div> --}}
+                                        {{#each groups_of_user}}
+                                            <div class="value">{{this.description}}</div>
+                                        {{/each}}
+                                    </div>
+                                {{/if}}
+                                <div id="default-section" style="display: none;">
                                     {{#if email}}
                                     <div id="email" class="default-field">
                                         <div class="name">{{t "Email" }}</div>
@@ -60,43 +69,39 @@
                                     </div>
                                     {{/if}}
                                 </div>
+                                <div class="bottom">
+                                    <div id="content">
+                                        {{#if is_bot}}
+                                            <div class="field-section">
+                                                <div class="name">{{t "Bot type" }}</div>
+                                                <div class="bot_info_value">{{bot_type}}</div>
+                                            </div>
+                                            {{#if bot_owner}}
+                                            <div class="field-section bot_owner_user_field" data-field-id="{{bot_owner.user_id}}">
+                                                <div class="name">{{t "Owner" }}</div>
+                                                <div class="pill-container not-editable">
+                                                    <div class="input" contenteditable="false" style="display: none;"></div>
+                                                </div>
+                                            </div>
+                                            {{/if}}
+                                        {{else}}
+                                            {{> user_custom_profile_fields profile_fields=profile_data}}
+                                        {{/if}}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-wrap col-right">
+                            <div class="col-wrap col-right new-avatar-box">
                                 <div id="avatar" {{#if user_is_guest}} class="guest-avatar" {{/if}}
                                   style="background-image: url('{{user_avatar}}');">
                                 </div>
-                                {{#if groups_of_user.length}}
-                                <div id="default-section">
-                                    <div class="default-field">
-                                        <div class="name">{{t "User groups" }}</div>
-                                        {{#each groups_of_user}}
-                                            <div class="value">{{this.description}}</div>
-                                        {{/each}}
-                                    </div>
+                                <div class="default-field">
+                                    {{!-- <div class="name">认证</div> --}}
+                                    <div class="value">工作额：0</div>
+                                    <div class="value">纠纷率：0%</div>
                                 </div>
-                                {{/if}}
                             </div>
                         </div>
-                        <div class="bottom">
-                            <div id="content">
-                                {{#if is_bot}}
-                                    <div class="field-section">
-                                        <div class="name">{{t "Bot type" }}</div>
-                                        <div class="bot_info_value">{{bot_type}}</div>
-                                    </div>
-                                    {{#if bot_owner}}
-                                    <div class="field-section bot_owner_user_field" data-field-id="{{bot_owner.user_id}}">
-                                        <div class="name">{{t "Owner" }}</div>
-                                        <div class="pill-container not-editable">
-                                            <div class="input" contenteditable="false" style="display: none;"></div>
-                                        </div>
-                                    </div>
-                                    {{/if}}
-                                {{else}}
-                                    {{> user_custom_profile_fields profile_fields=profile_data}}
-                                {{/if}}
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="tabcontent" id="user-profile-streams-tab">
@@ -122,6 +127,48 @@
                     </div>
                 </div>
             </main>
+
+            {{#unless spectator_view}}
+            <footer class="modal__footer new__footer">
+                <ul class="nav" data-user-id="{{user_id}}">
+                    {{#if can_send_private_message}}
+                        <li class="nav-item">
+                            <a tabindex="0" class="{{ private_message_class }}">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <span>{{t "Send direct message new" }}</span>
+                            </a>
+                        </li>
+                    {{/if}}
+                    <li class="nav-item">
+                        <a href="{{ pm_with_url }}" class="nav-item-link narrow_to_private_messages">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                            <span>
+                                {{t "View direct messages new" }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ sent_by_url }}" class="nav-item-link narrow_to_messages_sent">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            <span>{{t "View messages sent new" }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        {{#if has_message_context}}
+                        <a tabindex="0" class="nav-item-link mention_user">
+                            <i class="fa fa-at" aria-hidden="true"></i>
+                            <span>{{#if is_bot}}{{t "Reply mentioning bot" }}{{else}}{{t "Reply mentioning user" }}{{/if}}</span>
+                        </a>
+                        {{else}}
+                        <a tabindex="0" class="nav-item-link copy_mention_syntax" data-clipboard-text="{{ user_mention_syntax }}">
+                            <i class="fa fa-at" aria-hidden="true"></i>
+                            <span>{{t "Copy mention syntax new" }}</span>
+                        </a>
+                        {{/if}}
+                    </li>
+                </ul>
+            </footer>
+            {{/unless}}
         </div>
     </div>
 </div>

@@ -1386,5 +1386,24 @@
   "{seconds} sec to edit": "{seconds} 秒编辑",
   "{user_time} local time": "{user_time} 本地时间",
   "{username} [said]({link_to_message}):": "{username} [发言道]({link_to_message})：",
-  "{username} reacted with {emoji_name}": "{username} 已添加 {emoji_name} "
+  "{username} reacted with {emoji_name}": "{username} 已添加 {emoji_name} ",
+
+  "Send direct message new": "快捷私信",
+  "View direct messages new": "查看私信",
+  "View messages sent new": "历史发布",
+  "Copy mention syntax new": "复制@文本",
+  "All public streams in organization": "组织中的所有公开频道",
+  "direct messages": "私信",
+  "starred messages": "星标消息",
+  "@-mentions": "@提及",
+  "alerted messages": "提醒消息",
+  "unread messages": "未读消息",
+  "topics marked as resolved": "标记为已解决的主题",
+  "messages that contain links": "包含链接的消息",
+  "messages that contain images": "包含图片的消息",
+  "messages that contain attachments": "包含附件的消息",
+  "sent by me": "我发送的",
+  "stream": "频道",
+  "search for": "搜索",
+  "exclude": "排除"
 }

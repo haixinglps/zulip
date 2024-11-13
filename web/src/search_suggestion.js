@@ -3,6 +3,7 @@ import Handlebars from "handlebars/runtime";
 import * as common from "./common";
 import {Filter} from "./filter";
 import * as huddle_data from "./huddle_data";
+import {$t, $t_html} from "./i18n";
 import * as narrow_state from "./narrow_state";
 import {page_params} from "./page_params";
 import * as people from "./people";
@@ -119,7 +120,7 @@ function get_stream_suggestions(last, operators) {
     const highlight_query = typeahead_helper.highlight_with_escaping_and_regex;
 
     const objs = streams.map((stream) => {
-        const prefix = "stream";
+        const prefix = $t({defaultMessage: "stream"});
         const highlighted_stream = highlight_query(regex, stream);
         const verb = last.negated ? "exclude " : "";
         const description_html = verb + prefix + " " + highlighted_stream;
@@ -502,7 +503,7 @@ function get_special_filter_suggestions(last, operators, suggestions) {
 
     // Only show home if there's an empty bar
     if (operators.length === 0 && last_string === "") {
-        suggestions.unshift({search_string: "", description_html: "All messages"});
+        suggestions.unshift({search_string: "", description_html: $t({defaultMessage: "All messages"})});
     }
     return suggestions;
 }
@@ -511,7 +512,7 @@ function get_streams_filter_suggestions(last, operators) {
     const suggestions = [
         {
             search_string: "streams:public",
-            description_html: "All public streams in organization",
+            description_html: $t({defaultMessage: "All public streams in organization"}),
             invalid: [
                 {operator: "is", operand: "dm"},
                 {operator: "stream"},
@@ -528,7 +529,7 @@ function get_is_filter_suggestions(last, operators) {
     const suggestions = [
         {
             search_string: "is:dm",
-            description_html: "direct messages",
+            description_html: $t({defaultMessage: "direct messages"}),
             invalid: [
                 {operator: "is", operand: "dm"},
                 {operator: "is", operand: "resolved"},
@@ -539,27 +540,27 @@ function get_is_filter_suggestions(last, operators) {
         },
         {
             search_string: "is:starred",
-            description_html: "starred messages",
+            description_html: $t({defaultMessage: "starred messages"}),
             invalid: [{operator: "is", operand: "starred"}],
         },
         {
             search_string: "is:mentioned",
-            description_html: "@-mentions",
+            description_html: $t({defaultMessage: "@-mentions"}),
             invalid: [{operator: "is", operand: "mentioned"}],
         },
         {
             search_string: "is:alerted",
-            description_html: "alerted messages",
+            description_html: $t({defaultMessage: "alerted messages"}),
             invalid: [{operator: "is", operand: "alerted"}],
         },
         {
             search_string: "is:unread",
-            description_html: "unread messages",
+            description_html: $t({defaultMessage: "unread messages"}),
             invalid: [{operator: "is", operand: "unread"}],
         },
         {
             search_string: "is:resolved",
-            description_html: "topics marked as resolved",
+            description_html: $t({defaultMessage: "topics marked as resolved"}),
             invalid: [
                 {operator: "is", operand: "resolved"},
                 {operator: "is", operand: "dm"},
@@ -575,17 +576,17 @@ function get_has_filter_suggestions(last, operators) {
     const suggestions = [
         {
             search_string: "has:link",
-            description_html: "messages that contain links",
+            description_html: $t({defaultMessage: "messages that contain links"}),
             invalid: [{operator: "has", operand: "link"}],
         },
         {
             search_string: "has:image",
-            description_html: "messages that contain images",
+            description_html: $t({defaultMessage: "messages that contain images"}),
             invalid: [{operator: "has", operand: "image"}],
         },
         {
             search_string: "has:attachment",
-            description_html: "messages that contain attachments",
+            description_html: $t({defaultMessage: "messages that contain attachments"}),
             invalid: [{operator: "has", operand: "attachment"}],
         },
     ];
@@ -603,7 +604,7 @@ function get_sent_by_me_suggestions(last, operators) {
     const sender_me_query = negated_symbol + "sender:me";
     const from_me_query = negated_symbol + "from:me";
     const sent_string = negated_symbol + "sent";
-    const description_html = verb + "sent by me";
+    const description_html = verb + $t({defaultMessage: "sent by me"});
 
     const invalid = [{operator: "sender"}, {operator: "from"}];
 

@@ -47,6 +47,7 @@ import * as ui_util from "./ui_util";
 import * as unread from "./unread";
 import * as unread_ops from "./unread_ops";
 import * as unread_ui from "./unread_ui";
+import * as user_profile from "./user_profile";
 import * as user_status from "./user_status";
 import * as user_topics from "./user_topics";
 
@@ -1256,7 +1257,8 @@ export function initialize() {
         const participant_user_id = Number.parseInt($(this).attr("data-user-id"), 10);
         e.stopPropagation();
         const user = people.get_by_user_id(participant_user_id);
-        popovers.show_user_info_popover(this, user);
+        user_profile.show_user_profile(user);
+        // popovers.show_user_info_popover(this, user);
     });
 
     $("body").on(

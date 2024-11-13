@@ -743,7 +743,8 @@ export function register_click_handlers() {
             e.stopPropagation();
             const message = message_lists.current.get(rows.id($row));
             const user = people.get_by_user_id(message.sender_id);
-            show_user_info_popover_for_message(this, user, message);
+            user_profile.show_user_profile(user);
+            // show_user_info_popover_for_message(this, user, message);
         },
     );
 
@@ -975,23 +976,24 @@ export function register_click_handlers() {
         // smaller browser windows.
         hide_all_except_sidebars();
 
-        if (previous_user_sidebar_id === user_id) {
-            // If the popover is already shown, clicking again should toggle it.
-            return;
-        }
+        // if (previous_user_sidebar_id === user_id) {
+        //     // If the popover is already shown, clicking again should toggle it.
+        //     return;
+        // }
 
         const user = people.get_by_user_id(user_id);
-        const popover_placement = userlist_placement === "left" ? "right" : "left";
+        // const popover_placement = userlist_placement === "left" ? "right" : "left";
 
-        render_user_info_popover(
-            user,
-            $target,
-            false,
-            false,
-            "compose_private_message",
-            "user_popover",
-            popover_placement,
-        );
+        // render_user_info_popover(
+        //     user,
+        //     $target,
+        //     false,
+        //     false,
+        //     "compose_private_message",
+        //     "user_popover",
+        //     popover_placement,
+        // );
+        user_profile.show_user_profile(user);
 
         current_user_sidebar_user_id = user.user_id;
         current_user_sidebar_popover = $target.data("popover");
@@ -1013,6 +1015,7 @@ export function register_click_handlers() {
         if (overlays.is_active()) {
             overlays.close_active();
         }
+        $('.modal__close').trigger('click');
         e.stopPropagation();
         e.preventDefault();
     });
@@ -1021,6 +1024,7 @@ export function register_click_handlers() {
 
     $("body").on("click", ".copy_mention_syntax", (e) => {
         hide_all();
+        $('.modal__close').trigger('click');
         e.stopPropagation();
         e.preventDefault();
     });
