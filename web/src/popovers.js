@@ -39,6 +39,7 @@ import * as settings_config from "./settings_config";
 import * as settings_users from "./settings_users";
 import * as stream_popover from "./stream_popover";
 import * as timerender from "./timerender";
+import * as ui_init from "./ui_init";
 import * as ui_report from "./ui_report";
 import * as user_groups from "./user_groups";
 import * as user_profile from "./user_profile";
@@ -869,7 +870,7 @@ export function register_click_handlers() {
         e.preventDefault();
     });
 
-    $("body").on("click", ".info_popover_actions .clear_status", (e) => {
+    $("body").on("click", ".info_popover_actions .clear_status, .status-new .clear_status", (e) => {
         e.preventDefault();
         const me = elem_to_user_id($(e.target).parents("ul"));
         user_status.server_update_status({
@@ -879,6 +880,7 @@ export function register_click_handlers() {
             emoji_code: "",
             success() {
                 $(".info_popover_actions #status_message").empty();
+                $(".status-new #status_message").empty();
             },
         });
     });
@@ -898,6 +900,7 @@ export function register_click_handlers() {
     $("body").on("click", ".invisible_mode_turn_on", (e) => {
         hide_all();
         user_status.server_invisible_mode_on();
+        ui_init.update_right_sidebar_status(true);
         e.stopPropagation();
         e.preventDefault();
     });
@@ -905,6 +908,7 @@ export function register_click_handlers() {
     $("body").on("click", ".invisible_mode_turn_off", (e) => {
         hide_all();
         user_status.server_invisible_mode_off();
+        ui_init.update_right_sidebar_status(false);
         e.stopPropagation();
         e.preventDefault();
     });
@@ -970,7 +974,7 @@ export function register_click_handlers() {
         const $target = $(this).closest("li");
         const user_id = elem_to_user_id($target.find("a"));
         // Hiding popovers may mutate current_user_sidebar_user_id.
-        const previous_user_sidebar_id = current_user_sidebar_user_id;
+        // const previous_user_sidebar_id = current_user_sidebar_user_id;
 
         // Hide popovers, but we don't want to hide the sidebars on
         // smaller browser windows.

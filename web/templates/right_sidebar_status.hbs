@@ -1,0 +1,45 @@
+<ul class="nav nav-list">
+    {{#if status_content_available}}
+        <li class="user_info_status_text">
+            <span id="status_message">
+                {{#if status_emoji_info}}
+                    {{#if status_emoji_info.emoji_alt_code}}
+                        <div class="emoji_alt_code">&nbsp;:{{status_emoji_info.emoji_name}}:</div>
+                    {{else if status_emoji_info.url}}
+                        <img src="{{status_emoji_info.url}}" class="emoji status-emoji" />
+                    {{else}}
+                        <div class="emoji status-emoji emoji-{{status_emoji_info.emoji_code}}"></div>
+                    {{/if}}
+                {{/if}}
+                <span class="status_text">
+                    {{status_text}}
+                    <span class="clear_status_button">(<a tabindex="0" class="clear_status">{{t "clear" }}</a>)</span>
+                </span>
+            </span>
+        </li>
+    {{/if}}
+
+    <li>
+        <a tabindex="0" class="update_status_text">
+            <i class="fa fa-comments" aria-hidden="true"></i>
+            {{#if status_text}}
+                {{t "Edit status" }}
+            {{else}}
+                {{t "Set a status" }}
+            {{/if}}
+        </a>
+    </li>
+    {{#if invisible_mode}}
+    <li>
+        <a tabindex="0" class="invisible_mode_turn_off">
+            <i class="fa fa-circle-o" aria-hidden="true"></i> {{t "Turn off invisible mode" }}
+        </a>
+    </li>
+    {{else}}
+    <li>
+        <a tabindex="0" class="invisible_mode_turn_on">
+            <i class="fa fa-circle-o" aria-hidden="true"></i> {{t "Go invisible" }}
+        </a>
+    </li>
+    {{/if}}
+</ul>

@@ -4,6 +4,7 @@ import $ from "jquery";
 import render_user_group_list_item from "../templates/user_group_list_item.hbs";
 import render_user_profile_modal from "../templates/user_profile_modal.hbs";
 import render_user_stream_list_item from "../templates/user_stream_list_item.hbs";
+import render_youfang_message from "../templates/youfang_message.hbs";
 
 import * as browser_history from "./browser_history";
 import * as buddy_data from "./buddy_data";
@@ -182,7 +183,7 @@ function initialize_user_type_fields(user) {
     }
 }
 
-export function show_user_profile(user, default_tab_key = "profile-tab") {
+export async function show_user_profile(user, default_tab_key = "profile-tab") {
     popovers.hide_all();
 
     const field_types = page_params.custom_profile_field_types;
@@ -222,8 +223,7 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
         private_message_class: "compose_private_message",
         pm_with_url: hash_util.pm_with_url(user.email),
         sent_by_url: hash_util.by_sender_url(user.email),
-        user_mention_syntax: people.get_mention_syntax(user.full_name, user.user_id),
-
+        user_mention_syntax: people.get_mention_syntax(user.full_name, user.user_id)
     };
 
     if (user.is_bot) {
@@ -241,6 +241,8 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
     $("#user-profile-modal-holder").html(render_user_profile_modal(args));
     overlays.open_modal("user-profile-modal", {autoremove: true});
     $(".tabcontent").hide();
+
+    get_youfang_message(user);
 
     let default_tab = 0;
     // Only checking this tab key as currently we only open this tab directly
@@ -277,6 +279,22 @@ export function show_user_profile(user, default_tab_key = "profile-tab") {
     const $elem = components.toggle(opts).get();
     $elem.addClass("large allow-overflow");
     $("#tab-toggle").append($elem);
+}
+
+async function get_youfang_message(user) {
+    let youfang_message = []
+    const { code, result } = await channel.get({
+        url: "https://rpa.insfair.cn/zmtapi/zmt/list?page=1&size=5&zulipUid=" + user.user_id,
+    });
+
+    if(code === 200) {
+        youfang_message = result.list
+    }
+    const rendered_youfang_message = render_youfang_message({
+        youfang_message
+    });
+
+    $("#youfang_message_box").html(rendered_youfang_message);
 }
 
 function handle_remove_stream_subscription(target_user_id, sub, success, failure) {

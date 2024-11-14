@@ -11,6 +11,7 @@ import render_message_feed_bottom_whitespace from "../templates/message_feed_bot
 import render_message_feed_errors from "../templates/message_feed_errors.hbs";
 import render_navbar from "../templates/navbar.hbs";
 import render_right_sidebar from "../templates/right_sidebar.hbs";
+import render_right_sidebar_status from "../templates/right_sidebar_status.hbs";
 
 import * as about_zulip from "./about_zulip";
 import * as activity from "./activity";
@@ -186,10 +187,31 @@ function initialize_left_sidebar() {
     $("#left-sidebar-container").html(rendered_sidebar);
 }
 
+export function update_right_sidebar_status(status, user_status_params, is_setting) {
+    const user = people.get_by_user_id(page_params.user_id);
+    let status_text = user_status.get_status_text(user.user_id);
+    let status_emoji_info = user_status.get_status_emoji(user.user_id);
+    if (user_status_params) {
+        const status_obj = is_setting ? user_status_params : user_status_params.user_status[page_params.user_id]
+        status_text = status_obj ? status_obj.status_text : '';
+        status_emoji_info = status_obj
+    }
+
+    const rendered_sidebar_status = render_right_sidebar_status({
+        status_content_available: Boolean(status_text || status_emoji_info),
+        status_emoji_info,
+        status_text,
+        invisible_mode: status
+    });
+
+    $("#status-new").html(rendered_sidebar_status);
+}
+
 function initialize_right_sidebar() {
     const rendered_sidebar = render_right_sidebar({
         can_invite_others_to_realm: settings_data.user_can_invite_others_to_realm(),
         realm_rendered_description: page_params.realm_rendered_description,
+        invisible_mode: false
     });
 
     $("#right-sidebar-container").html(rendered_sidebar);
@@ -654,6 +676,7 @@ export function initialize_everything() {
     initialize_bottom_whitespace();
     initialize_left_sidebar();
     initialize_right_sidebar();
+    update_right_sidebar_status(!user_settings_params.user_settings.presence_enabled, user_status_params);
     initialize_compose_box();
     settings.initialize();
     initialize_navbar();
