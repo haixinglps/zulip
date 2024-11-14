@@ -712,7 +712,7 @@ export function user_can_direct_message(recipient_ids_string) {
 
 function gravatar_url_for_email(email) {
     const hash = md5(email.toLowerCase());
-    const avatar_url = "https://secure.gravatar.com/avatar/" + hash + "?d=identicon";
+    const avatar_url = "https://cn.cravatar.com/avatar/" + hash + "?d=identicon";
     const small_avatar_url = format_small_avatar_url(avatar_url);
     return small_avatar_url;
 }
@@ -731,7 +731,7 @@ export function small_avatar_url_for_person(person) {
 
 function medium_gravatar_url_for_email(email) {
     const hash = md5(email.toLowerCase());
-    const avatar_url = "https://secure.gravatar.com/avatar/" + hash + "?d=identicon";
+    const avatar_url = "https://cn.cravatar.com/avatar/" + hash + "?d=identicon";
     const url = new URL(avatar_url, location.origin);
     url.search += (url.search ? "&" : "") + "s=500";
     return url.href;

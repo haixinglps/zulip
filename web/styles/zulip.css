@@ -3171,3 +3171,15 @@ select.invite-as {
         padding: 5px;
     }
 }
+
+.status-new {
+    margin-bottom: 20px;
+
+    .nav-list > li > a {
+        padding-left: 0;
+    }
+
+    .user_info_status_text #status_message {
+        margin-left: -15px;
+    }
+}

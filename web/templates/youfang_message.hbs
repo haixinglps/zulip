@@ -1,0 +1,15 @@
+<div class="field-section">
+    <div class="name">创建的工作流</div>
+    {{#each youfang_message}}
+        <div class="bot_info_value">
+            <a href="http://rpa.insfair.cn/zulip2/project.html?id={{this.id}}" target="_blank">
+                {{this.title}}
+            </a>
+        </div>
+    {{/each}}
+    {{#unless youfang_message.length}}
+        <div class="bot_info_value">
+            无
+        </div>
+    {{/unless}}
+</div>

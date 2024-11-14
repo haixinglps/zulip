@@ -8,6 +8,8 @@ import * as emoji from "./emoji";
 import {$t, $t_html} from "./i18n";
 import * as keydown_util from "./keydown_util";
 import * as people from "./people";
+import * as ui_init from "./ui_init";
+import {user_settings} from "./user_settings";
 import * as user_status from "./user_status";
 
 let selected_emoji_info = {};
@@ -70,6 +72,13 @@ export function submit_new_status() {
         reaction_type: selected_emoji_info.reaction_type || "",
         success() {
             dialog_widget.close_modal();
+            const user_status_params = {
+                status_text: new_status_text,
+                emoji_name: selected_emoji_info.emoji_name || "",
+                emoji_code: selected_emoji_info.emoji_code || "",
+                reaction_type: selected_emoji_info.reaction_type || "",
+            }
+            ui_init.update_right_sidebar_status(!user_settings.presence_enabled, user_status_params, true);
         },
     });
 }
