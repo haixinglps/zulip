@@ -188,6 +188,9 @@ function initialize_left_sidebar() {
 }
 
 export function update_right_sidebar_status(status, user_status_params, is_setting) {
+    if(!page_params.user_id) {
+        return;
+    }
     const user = people.get_by_user_id(page_params.user_id);
     let status_text = user_status.get_status_text(user.user_id);
     let status_emoji_info = user_status.get_status_emoji(user.user_id);
