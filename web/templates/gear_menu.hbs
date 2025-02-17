@@ -1,7 +1,7 @@
 <ul class="nav" role="navigation">
     <li class="dropdown actual-dropdown-menu" id="gear-menu">
         <a id="settings-dropdown" tabindex="0" role="button" class="dropdown-toggle tippy-zulip-delayed-tooltip" data-target="nada" data-toggle="dropdown" data-tooltip-template-id="gear-menu-tooltip-template">
-            <i class="fa fa-cog settings-dropdown-cog" aria-hidden="true"></i>
+            <i class="fa fa-user settings-dropdown-cog" aria-hidden="true"></i>
         </a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="settings-dropdown">
             <li class="org-info org-name">{{realm_name}}</li>
@@ -11,6 +11,22 @@
                 <a href="/upgrade/" target="_blank" rel="noopener noreferrer" role="menuitem">{{t "Upgrade to {standard_plan_name}" }}</a>
             </li>
             {{/if}}
+            <li class="divider" role="presentation"></li>
+            <li class="hidden-for-spectators" role="presentation">
+                <a href="#streams/subscribed" role="menuitem">
+                    <i class="fa fa-calendar-minus-o" aria-hidden="true"></i> 全部工单
+                </a>
+            </li>
+            <li class="hidden-for-spectators" role="presentation">
+                <a href="#streams/subscribed" role="menuitem">
+                    <i class="fa fa-list-ol" aria-hidden="true"></i> 我的工作流
+                </a>
+            </li>
+            <li class="hidden-for-spectators" role="presentation">
+                <a href="#streams/subscribed" role="menuitem">
+                    <i class="fa fa-cube" aria-hidden="true"></i> 我的商品服务
+                </a>
+            </li>
             <li class="divider" role="presentation"></li>
             <li class="hidden-for-spectators" role="presentation">
                 <a href="#streams/subscribed" role="menuitem">
