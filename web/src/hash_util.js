@@ -166,6 +166,16 @@ export function stream_edit_url(sub) {
     return hash;
 }
 
+export function work_stream_detail_url(sub) {
+    const hash = `#work-streams/${sub.id}`;
+    return hash;
+}
+
+export function work_sku_detail_url(sub) {
+    const hash = `#my-sku/${sub.id}`;
+    return hash;
+}
+
 export function group_edit_url(group) {
     const hash = `#groups/${group.id}/${internal_url.encodeHashComponent(group.name)}`;
     return hash;
@@ -222,6 +232,9 @@ export function is_overlay_hash(hash) {
         "search-operators",
         "about-zulip",
         "scheduled",
+        "user-work",
+        "work-streams",
+        "my-sku",
     ];
     const main_hash = get_hash_category(hash);
 

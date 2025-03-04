@@ -1,0 +1,100 @@
+{{#if isAll}}
+    <div class="list-tips">
+        暂无更多数据
+    </div>
+{{else}}
+    {{#each user_list}}
+        <div class="join-member-item">
+            <div class="item-top">
+                <div class="avatar">
+                    <img class="img" src="{{photo}}" alt="">
+                </div>
+                <div class="info">
+                    <div class="name">
+                        {{nickname}}
+                    </div>
+                    <div class="join-time">
+                        加入时间 <span>{{created}}</span>
+                    </div>
+                </div>
+                <div class="handler">
+                    {{#if isMyReply}}
+                    <span class="red">你提交了异常</span>
+                    {{else if (eq statusException 1)}}
+                    <span class="red">参与人上报了你的异常</span>
+                    {{else if statusException}}
+                    <span>异常</span>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="item-content">
+                {{#if urls.total}}
+                <div class="material-list material-url-box">
+                    {{#each urls.list}}
+                    <div class="list-item">
+                        <div class="create-time">
+                            {{#if ownerTag}}创建人于{{/if}} {{created}}
+                        </div>
+                        <div class="material-url-item">
+                            <a href="{{url}}" target="_blank">{{url}}</a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{else}}
+                <div class="no-material-text">
+                    参与人尚未提交素材
+                </div>
+                {{/if}}
+            </div>
+            <div class="material-handler-content help-submit-form">
+                <div class="material-input-box">
+                    <div class="material-input-item">
+                        <input class="input material-input" placeholder="请输入链接URL"></input>
+                    </div>
+                </div>
+                <div class="material-submit-status"></div>
+                <div class="add-new-btn-box">
+                    <a href="javascript:;" class="add-new-material-input">+ 新增</a>
+                    <button class="button small rounded help-submit-material-button" data-gongdan-id="{{gongdanId}}" data-task-id="{{id}}">提交</button>
+                </div>
+            </div>
+            <div class="item-footer">
+                <a href="javascript:;" class="help-add-new-material-input">+ 协助提交素材</a>
+                <div class="status-buttons">
+                    {{#if (and (eq statusException 0) (not (eq status 5)) (not (eq status 3)))}}
+                    <button class="button small rounded help-report-material-button" data-gongdan-id="{{gongdanId}}" data-task-id="{{id}}">报告异常</button>
+                    {{/if}}
+                    {{#unless urls.total}}
+                    <div class="status-text">等待提交</div>
+                    {{else if statusException}}
+                    <div class="status-text">你更新了异常情况</div>
+                    {{/unless}}
+                    {{#if (eq status 4)}}
+                    <div class="status-text">审核不通过</div>
+                    {{/if}}
+                    {{#if isMyReply}}
+                    <button class="button small rounded help-show-report-button" data-gongdan-id="{{gongdanId}}" data-task-id="{{id}}" data-excep-status="{{statusException}}">查看异常</button>
+                    {{else}}
+                        {{#if (not (eq statusException 0))}}
+                        <button class="button small rounded">处理异常</button>
+                        {{/if}}
+                    {{/if}}
+
+                    {{#unless isMyReply}}
+                        {{#if (eq status 2)}}
+                        <button class="button small rounded nopass-material-btn" data-task-id="{{id}}">不通过</button>
+                        <button class="button small rounded pass-material-btn" data-task-id="{{id}}">审核通过</button>
+                        {{/if}}
+                        {{#if (eq status 3)}}
+                        <button class="button small rounded feedback-material-btn" data-gongdan-id="{{gongdanId}}" data-user-id="{{user}}">已审核 请反馈</button>
+                        {{/if}}
+                        {{#if (eq status 5)}}
+                        <button class="button small rounded">查看反馈</button>
+                        {{/if}}
+                    {{/unless}}
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}

@@ -1,0 +1,209 @@
+<div class="work-detail-header">
+    <span class="work-title work-detail-title">{{detail.id}}</span>
+    {{#if (eq detail.cyStatus 1)}}
+    <span class="work-status user-work-join-status">已提交 待审核</span>
+    {{/if}}
+    {{#if isMycreated}}
+    <span class="work-status user-work-join-status green">开放参与</span>
+    {{/if}}
+</div>
+<div class="work-builder-info">
+    <div class="info-top">
+        <span class="info-label">创建人</span>
+        <div class="value">{{detail.nickname}}</div>
+    </div>
+    <div class="info-content">
+        <div class="info-avatar">
+            <div class="avatar" style="background-image: url('{{detail.photo}}');"></div>
+        </div>
+        <div class="info-detail">
+            <div class="default-field avatar-info-top">
+                <div class="value">总交易额：{{detail.money}}</div>
+                <div class="value">纠纷率：0%</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-title">
+                    <div class="title-icon">
+                        <svg t="1739274571502" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10410" id="mx_n_1739274571503" width="18" height="18"><path d="M501.04206222 604.04167111c112.89031111 0 204.7488-91.84597333 204.7488-204.7488s-91.85848889-204.72945778-204.7488-204.72945778c-112.86641778 0-204.72376889 91.82094222-204.72376889 204.72376889s91.85735111 204.75448889 204.72376889 204.75448889z m0-350.99648c80.63658667 0 146.23630222 65.5872 146.23630223 146.24768 0 80.64910222-65.60654222 146.26816-146.23630223 146.26816-80.65479111 0-146.24881778-65.61905778-146.24881777-146.27271111 0-80.65592889 65.59402667-146.24312889 146.24881777-146.24312889z m281.53400889 383.71669333c63.00558222-74.62001778 97.08202667-174.43157333 84.34574222-282.01756444C847.08465778 186.47495111 711.51160889 51.87128888 543.1808 33.08885333c-222.03960889-24.71822222-410.70364445 149.11829333-410.70364445 366.20515555 0 91.73447111 33.79882667 175.70702222 89.47825778 240.25315556L106.28664889 849.96551111c-4.31104 7.7824 1.36760889 17.32266667 10.25934222 17.32266667h135.78126222a23.31989333 23.31989333 0 0 1 19.49354667 10.53582222l80.02901333 122.60920888c4.79004445 7.32728889 15.59438222 7.0144 19.97824-0.54044444L503.02293333 771.12661333 634.27697778 999.85749333c4.31786667 7.59125333 15.11651555 7.90414222 19.89973333 0.57685333l80.10752-122.61034666a23.30168889 23.30168889 0 0 1 19.43324444-10.54037334h135.83587556c8.89742222 0 14.51463111-9.53457778 10.27754667-17.31697778L782.57607111 636.76188444z m-322.02979556-544.91591111c202.58929778-25.84007111 373.74634667 145.34769778 347.96771556 347.9552-17.64238222 138.33898667-128.66218667 249.35879111-266.98183111 266.96362667C338.92352 732.55822222 167.78467555 561.37500444 193.57013333 358.82780444c17.65376-138.35605333 128.58823111-249.35879111 266.97614222-266.98183111z m-106.57564444 804.87082667l-50.47751111-77.38026667a23.25276445 23.25276445 0 0 0-19.48785778-10.54037333h-75.7248a7.44448 7.44448 0 0 1-6.52401777-11.03758222l63.51530666-115.5026489a367.0016 367.0016 0 0 0 175.11196444 80.52508445l-76.64981333 133.64224a5.72074667 5.72074667 0 0 1-9.75075555 0.29354667z m348.64924444-77.38026667l-50.54577777 77.38709333a5.65475555 5.65475555 0 0 1-9.6768-0.3072L565.34812445 762.08355555a367.21664 367.21664 0 0 0 174.21084444-82.16917333l66.22663111 120.45084444a5.68433778 5.68433778 0 0 1-5.01077333 8.43093334h-78.63637334a23.27665778 23.27665778 0 0 0-19.51288888 10.5472z" p-id="10411" fill="#e5bb69"></path></svg>
+                    </div>
+                    <div class="title-text">
+                        <span class="orange">999</span>
+                    </div>
+                </div>
+                <div class="tag orange">
+                    颜值博主 298 <span class="span">Top1</span>
+                </div>
+                <div class="tag orange">
+                    美食博主 298 <span class="span">Top7</span>
+                </div>
+                <div class="tag">
+                    粉丝百万 29
+                </div>
+                <div class="tag">
+                    粉丝活跃 29
+                </div>
+                <div class="tag">
+                    粉丝购买力强 29
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-title">
+                    <div class="title-icon">
+                        <svg t="1739275100799" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18162" width="18" height="18"><path d="M896.7 353.6L670.4 127.3 172.6 625.1l-45.3 226.3 45.3 45.3 226.3-45.3 497.8-497.8zM670.4 217.8l135.8 135.8-50.9 50.9-135.8-135.7 50.9-51z m-314 585.5L214 831.8l-21.9-21.9 28.5-142.4L574.2 314 710 449.8 356.4 803.3zM448.5 832H896v64.7H448.5z" p-id="18163" fill="#409eff"></path></svg>
+                    </div>
+                    <div class="title-text">
+                        <span class="blue">666</span>
+                    </div>
+                </div>
+                <div class="tag blue">
+                    女装 298 <span class="span">Top2</span>
+                </div>
+                <div class="tag blue">
+                    化妆品 298 <span class="span">Top12</span>
+                </div>
+                <div class="tag">
+                    护眼霜 29
+                </div>
+                <div class="tag">
+                    女士帽 29
+                </div>
+                <div class="tag gray">
+                    女鞋
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="work-stream-table">
+    <div class="info-top">
+        <span class="info-label">工作流</span>
+        <div class="value">{{detail.zimeitiName}}</div>
+    </div>
+    <table id="stream-detail-steps-table">
+        <thead>
+            <tr>
+                <th>步骤</th>
+                <th>任务名称</th>
+                <th>操作说明</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div class="info-sku-list">
+    <div class="info-top">
+        <span class="info-label">关联商品服务</span>
+    </div>
+    <div class="sku-item">
+        <div class="sku-img">
+            <img class="img" src="{{detail.sku.skuPic}}" alt="">
+        </div>
+        <div class="sku-info">
+            <div class="sku-top">
+                <div class="sku-title">
+                    {{detail.skuName}}
+                </div>
+                <div class="sku-sales">
+                    <span>总交易额 1999</span>
+                    <span>纠纷率 1%</span>
+                    <span>关联工单 1</span>
+                </div>
+            </div>
+            <div class="sku-bottom">
+                <div class="sku-tags">
+                    <div class="tag">
+                        粉丝活跃 29
+                    </div>
+                    <div class="tag">
+                        粉丝活跃 29
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="info-members-content">
+    <div class="info-top">
+        <span class="info-label">素材提交截止时间</span>
+        <div class="value">{{detail.endTime}}</div>
+    </div>
+    <div class="info-top">
+        <span class="info-label">参与人 <span class="join-member-count">{{detail.userCount}}</span></span>
+        {{#if isMycreated}}
+        <div class="buttons join-count-down-box">
+            参与人提交截止剩余
+        </div>
+        {{else}}
+        <div class="buttons">
+            <button class="button small join-button" data-id="{{detail.id}}">立即参与</button>
+        </div>
+        {{/if}}
+    </div>
+    {{#if isMycreated}}
+    <div class="join-member-list" id="join-member-list">
+
+    </div>
+    <div class="show-all-member-btn" id="show-all-join-btn" data-id="{{detail.id}}">
+        查看全部 <span class="join-member-status-tongji"></span> >>
+    </div>
+    {{else}}
+    <div class="members-list" id="gongdan-join-member-list">
+        {{!--
+        <div class="member-more">
+            ...
+        </div> --}}
+    </div>
+    {{/if}}
+</div>
+{{#unless isMycreated}}
+<div class="material-handler-content">
+    <div class="info-top">
+        <div class="info-label">
+            <span>素材提交</span>
+            <span class="user-work-join-status"></span>
+        </div>
+        <div class="buttons material-count-down-box">
+            剩余
+        </div>
+    </div>
+    <div class="material-tips">
+        请以链接URL形式提交，可以用常见软件生成URL。例如https://www.bilibili.com/video/BV1ihKNeUEVN/
+    </div>
+    <div class="material-url-box">
+    </div>
+    <div class="material-input-box">
+        <div class="material-input-item">
+            <input class="input material-input" placeholder="请输入链接URL"></input>
+        </div>
+    </div>
+    <div class="add-new-btn-box">
+        <a href="javascript:;" class="add-new-material-input">+ 新增</a>
+    </div>
+    <div class="material-submit-status"></div>
+    <div class="buttons material-handler-buttons">
+        <button class="button small rounded submit-material-button">提交</button>
+        <span class="excep-text-status"></span>
+        <button class="button small rounded report-material-button" data-id="{{detail.id}}">报告异常</button>
+        <button class="button small rounded show-report-button" data-id="{{detail.id}}">查看异常</button>
+    </div>
+    <div class="feedback-handler-box">
+        <button class="button small feedback-button" data-id="{{detail.id}}">立即反馈</button>
+        <button class="button small show-feedback-button" data-id="{{detail.id}}">查看反馈</button>
+        <span>及时准确进行反馈，可以快速增加话语权重</span>
+    </div>
+</div>
+{{/unless}}
+<div class="work-detail-intro">
+    <div class="info-top">
+        <span class="info-label">预计交易额</span>
+        <div class="value">{{detail.money}}</div>
+    </div>
+    <div class="intro-content">
+        <div class="info-top">
+            <span class="info-label">详细说明</span>
+        </div>
+        <div class="intro-article">
+            {{detail.description}}
+        </div>
+    </div>
+</div>

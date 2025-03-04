@@ -1,0 +1,54 @@
+<div class="work-stream-title">
+    {{detail.title}}
+</div>
+
+<div class="work-stream-content">
+    <div class="content-top">
+        <div class="top-left">
+            <div class="content-id">
+                {{detail.pid}}
+            </div>
+            <div class="content-builder">
+                创建人
+                <div class="pill " tabindex="0">
+                    <img class="pill-image" src="{{detail.img}}">
+                    <span class="pill-value">{{detail.author}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="top-right">
+            {{!-- <button class="button small rounded">取消收藏</button> --}}
+        </div>
+    </div>
+
+    <div class="content-center">
+        <div class="content-section">
+            <div class="section-title">
+                步骤
+            </div>
+            <table>
+                <tr>
+                    <th>步骤</th>
+                    <th>任务名称</th>
+                    <th>操作说明</th>
+                </tr>
+                {{#each detail.steps}}
+                <tr>
+                    <td>step {{indexs}}</td>
+                    <td>{{title}}</td>
+                    <td>{{description}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="content-section">
+            <div class="section-title">
+                详细说明
+            </div>
+            <div class="section-content">
+                {{{detail.details.zhinan}}}
+            </div>
+        </div>
+    </div>
+</div>

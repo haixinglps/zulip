@@ -1,0 +1,41 @@
+<div class="work-sku-detail">
+    <div class="work-sku-title">
+        {{detail.skuName}}
+    </div>
+
+    <div class="work-sku-content">
+        <div class="sku-cover">
+            <img class="img" src="{{detail.skuPic}}" alt="">
+        </div>
+
+        <div class="sku-section">
+            <div class="sku-id">
+                {{detail.id}}
+            </div>
+            <div class="sku-sales">
+                <span>总交易额 1999</span>
+                <span>纠纷率 1%</span>
+                <span>关联工单 1</span>
+            </div>
+
+            <div class="section-title">
+                全部权重
+            </div>
+            <div class="sku-tags">
+                <div class="tag">
+                    粉丝活跃 29
+                </div>
+                <div class="tag">
+                    粉丝活跃 29
+                </div>
+            </div>
+        </div>
+
+        <div class="sku-img-list">
+            {{#each detail.skuUrl}}
+            <img class="img" src="{{this}}" alt="">
+            {{/each}}
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,36 @@
+{{#if isAll}}
+    <div class="list-more">
+        已加载全部
+    </div>
+{{else}}
+    {{#each skuList}}
+        <div class="sku-item" data-id="{{id}}">
+            <div class="sku-img">
+                <img class="img" src="{{skuPic}}" alt="">
+            </div>
+            <div class="sku-info">
+                <div class="sku-top">
+                    <div class="sku-title">
+                        {{skuName}}
+                    </div>
+                    <div class="sku-sales">
+                        <span>总交易额 {{#if money}}{{money}}{{else}}0{{/if}}</span>
+                        <span>纠纷率 {{#if excepNum}}{{multiply excepNum 100}}{{else}}0{{/if}}%</span>
+                        {{!-- <span>关联工单 1</span> --}}
+                        <span>交易量 {{#if count}}{{count}}{{else}}0{{/if}}</span>
+                    </div>
+                </div>
+                <div class="sku-bottom">
+                    <div class="sku-tags">
+                        {{!-- <div class="tag">
+                            粉丝活跃 29
+                        </div>
+                        <div class="tag">
+                            粉丝活跃 29
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}

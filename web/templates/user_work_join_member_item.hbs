@@ -1,0 +1,24 @@
+{{#if isAll}}
+    <div class="list-tips">
+        暂无人参与
+    </div>
+{{else}}
+    {{#each user_list}}
+        <div class="join-member-item">
+            <div class="avatar">
+                <img class="img" src="{{photo}}" alt="">
+            </div>
+            <div class="info">
+                <div class="name">
+                    {{nickname}}
+                </div>
+                <div class="join-time">
+                    {{created}}
+                </div>
+            </div>
+            <div class="handler">
+                <span>等待提交</span>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}

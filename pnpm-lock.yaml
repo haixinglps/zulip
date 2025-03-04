@@ -140,6 +140,9 @@ dependencies:
   jquery-caret-plugin:
     specifier: ^1.5.2
     version: 1.5.3
+  jquery-countdown:
+    specifier: ^2.2.0
+    version: 2.2.0
   jquery-validation:
     specifier: ^1.19.0
     version: 1.19.5(jquery@3.7.0)
@@ -161,6 +164,9 @@ dependencies:
   minimalistic-assert:
     specifier: ^1.0.1
     version: 1.0.1
+  moment:
+    specifier: ^2.30.1
+    version: 2.30.1
   panzoom:
     specifier: ^9.4.2
     version: 9.4.3
@@ -7576,6 +7582,10 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: false
 
+  /jquery-countdown@2.2.0:
+    resolution: {integrity: sha512-EKjzyaHYSQdOnn/eVvP84l044kDB6w//IR/25CHGyhJfT1Lb9pQdMo75n+MqZWgJpLprfeCyaPo/jaSn6sR5AA==}
+    dev: false
+
   /jquery-validation@1.19.5(jquery@3.7.0):
     resolution: {integrity: sha512-X2SmnPq1mRiDecVYL8edWx+yTBZDyC8ohWXFhXdtqFHgU9Wd4KHkvcbCoIZ0JaSaumzS8s2gXSkP8F7ivg/8ZQ==}
     peerDependencies:
@@ -8281,6 +8291,10 @@ packages:
   /mockdate@3.0.5:
     resolution: {integrity: sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==}
     dev: true
+
+  /moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+    dev: false
 
   /mouse-change@1.4.0:
     resolution: {integrity: sha512-vpN0s+zLL2ykyyUDh+fayu9Xkor5v/zRD9jhSqjRS1cJTGS0+oakVZzNm5n19JvvEj0you+MXlYTpNxUDQUjkQ==}

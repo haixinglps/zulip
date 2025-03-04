@@ -93,3 +93,30 @@ export function scroll_element_into_container(
 
     $container.scrollTop(($container.scrollTop() ?? 0) + delta);
 }
+
+export function on_scroll_to_bottom($element: JQuery, callback: () => void): void {
+    const $scrollElement = get_scroll_element($element);
+    let isProcessing = false;  // 添加标志位防止连续触发
+
+    $scrollElement.on('scroll', () => {
+        if (isProcessing) {
+            return;  // 如果正在处理中，直接返回
+        }
+
+        const scrollHeight = $scrollElement[0].scrollHeight;
+        const scrollTop = $scrollElement.scrollTop() ?? 0;
+        const clientHeight = $scrollElement.height() ?? 0;
+
+        // 当滚动到距离底部20px以内时触发
+        if (scrollHeight - (scrollTop + clientHeight) < 20) {
+            isProcessing = true;  // 设置处理中标志
+
+            callback();
+
+            // 1秒后重置标志位，允许下次触发
+            setTimeout(() => {
+                isProcessing = false;
+            }, 500);
+        }
+    });
+}

@@ -1,5 +1,8 @@
 <div class="compose_control_buttons_container order-1">
     <input type="file" class="file_input notvisible" multiple />
+    <a role="button" class="compose_control_button" aria-label="创建工单" tabindex=0 data-tippy-content="创建工单" href="#user-work/new">
+        <svg t="1740559664129" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="29925" width="17" height="17"><path d="M704.137 127.99V63.946H320.062v64.044H127.689l-0.83 832.355 321.228-0.787v-63.919h-256.05l-0.336-703.856h128.361l-0.097 64.169h384.172v-64.169l128.025 0.055v384.207h64.012v-448.22l-192.037 0.165z m-64.013 63.794h-256.05V127.99h256.05v63.794z" fill="#333333" p-id="29926"></path><path d="M320.062 511.014l256.05 0.58v64.452h-256.05zM320.062 383.79h384.075v64.419H320.062zM768.149 768.149l128.025-0.347v63.919H768.149v127.837h-64.012V831.721H576.112v-63.919h128.025V639.965h64.012z" fill="#333333" p-id="29927"></path><path d="M320.062 639.965l128.025-0.534v64.452l-128.025 1.114z" fill="#333333" p-id="29928"></path></svg>
+    </a>
     {{#if file_upload_enabled }}
     <a role="button" class="compose_control_button compose_upload_file fa fa-paperclip notdisplayed" aria-label="{{t 'Upload files' }}" tabindex=0 data-tippy-content="{{t 'Upload files' }}"></a>
     {{/if}}

@@ -1,6 +1,7 @@
 import $ from "jquery";
 
 import * as about_zulip from "./about_zulip";
+import * as user_work_order from "./user_work_order";
 import * as admin from "./admin";
 import * as blueslip from "./blueslip";
 import * as browser_history from "./browser_history";
@@ -23,6 +24,8 @@ import * as settings_panel_menu from "./settings_panel_menu";
 import * as settings_toggle from "./settings_toggle";
 import * as spectators from "./spectators";
 import * as stream_settings_ui from "./stream_settings_ui";
+import * as work_stream_ui from "./work_stream_ui";
+import * as work_sku_ui from "./work_sku_ui";
 import * as top_left_corner from "./top_left_corner";
 import * as ui_report from "./ui_report";
 import * as user_groups_settings_ui from "./user_groups_settings_ui";
@@ -275,6 +278,14 @@ function do_hashchange_overlay(old_hash) {
         history.replaceState(null, "", get_full_url("streams/subscribed"));
     }
 
+    if (base === "work-streams" && !section) {
+        history.replaceState(null, "", get_full_url("work-streams/subscribed"));
+    }
+
+    if (base === "my-sku" && !section) {
+        history.replaceState(null, "", get_full_url("my-sku"));
+    }
+
     // Start by handling the specific case of going
     // from something like streams/all to streams_subscribed.
     //
@@ -308,6 +319,10 @@ function do_hashchange_overlay(old_hash) {
             }
             settings_panel_menu.org_settings.activate_section_or_default(section);
             return;
+        }
+
+        if (base === "user-work") {
+            user_work_order.show_user_work_order('',section);
         }
 
         // TODO: handle other cases like internal settings
@@ -396,6 +411,20 @@ function do_hashchange_overlay(old_hash) {
 
     if (base === "scheduled") {
         scheduled_messages_overlay_ui.launch();
+    }
+
+    if (base === "user-work") {
+        user_work_order.show_user_work_order('',section);
+    }
+
+    if (base === "work-streams") {
+        work_stream_ui.launch(section);
+        return;
+    }
+
+    if (base === "my-sku") {
+        work_sku_ui.launch(section);
+        return;
     }
 }
 

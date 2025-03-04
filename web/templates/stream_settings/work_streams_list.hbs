@@ -1,0 +1,34 @@
+{{#if isAll}}
+    <div class="list-more">
+        已加载全部
+    </div>
+{{else}}
+    {{#each streamList}}
+        <div class="work-stream-item">
+            <div class="stream-id">
+                {{pid}}
+            </div>
+            <div class="stream-title">
+                {{title}}
+            </div>
+            <div class="stream-builder">
+                创建人
+                <div class="pill " tabindex="0">
+                    <img class="pill-image" src="{{img}}">
+                    <span class="pill-value">{{author}}</span>
+                </div>
+            </div>
+            <div class="stream-desc">
+                说明：{{shortDesc}}
+            </div>
+            <div class="stream-footer">
+                {{#if isMy}}
+                <button class="button small rounded cancel-collect" data-id="{{id}}">取消收藏</button>
+                {{else}}
+                <button class="button small rounded collect-stream" data-id="{{id}}">收藏</button>
+                {{/if}}
+                <button class="button small rounded show-detail" data-id="{{id}}">查看详情</button>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}

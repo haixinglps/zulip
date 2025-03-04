@@ -1,0 +1,97 @@
+<div id="work_sku_overlay" class="overlay new-style" data-overlay="work_skus">
+    <div class="flex overlay-content">
+        <div class="work-subscriptions-container modal-bg">
+            <div class="subscriptions-header">
+                <div class="fa fa-chevron-left"></div>
+                <span class="subscriptions-title">&nbsp;</span>
+                <span class="subscriptions-title normal-title">我的商品服务</span>
+                <span class="subscriptions-title detail-title">商品服务详情</span>
+                <span class="subscriptions-title add-title">添加商品服务</span>
+                <div class="exit">
+                    <span class="exit-sign">&times;</span>
+                </div>
+            </div>
+            <div class="left">
+                <div class="search-container">
+                    <div id="add_new_sku">
+                        <button class="create_sku_button create_stream_plus_button tippy-zulip-delayed-tooltip" data-tooltip-template-id="create-new-stream-tooltip-template" data-tippy-placement="bottom">
+                            <span>+</span>
+                        </button>
+                        <div class="float-clear"></div>
+                    </div>
+                </div>
+                {{!-- <div class="input-append stream_name_search_section" id="work_sku_filter">
+                    <input type="text" name="stream_name" id="sku_search_stream_name" autocomplete="off"
+                      placeholder="过滤" value=""/>
+                    <button type="button" class="btn clear_search_button" id="sku_clear_search_stream_name">
+                        <i class="fa fa-remove" aria-hidden="true"></i>
+                    </button>
+                </div> --}}
+                <div class="streams-list work-sku-list">
+
+                </div>
+            </div>
+            <div class="right">
+                <div id="work_sku_info_tem"></div>
+            </div>
+
+            <div class="another-right">
+                <form class="work-sku-form">
+                    <div class="custom_user_field">
+                        <div class="form-label">
+                            <label class="inline-block" for="x" class="title">商品服务名称</label>
+                            <div class="alert-notification custom-field-status"></div>
+                        </div>
+                        <div class="field_hint"></div>
+                        <div class="field">
+                            <input class="custom_user_field_value modal_text_input settings_text_input sku_name" type="text" placeholder="请输入" />
+                        </div>
+                    </div>
+                    <div class="custom_user_field">
+                        <div class="form-label">
+                            <label class="inline-block" for="x" class="title">主图</label>
+                            <div class="alert-notification custom-field-status"></div>
+                        </div>
+                        <div class="field_hint">正方形，唯一</div>
+                        <div class="field">
+                            {{> ../settings/image_upload_widget
+                                widget = "sku-cover"
+                                upload_text = '上传主图'
+                                delete_text = '删除主图'
+                                disabled_text = ''
+                                is_editable_by_current_user = true
+                                image = ''
+                                new_upload = true}}
+                        </div>
+                    </div>
+
+                    <div class="custom_user_field">
+                        <div class="form-label">
+                            <label class="inline-block" for="x" class="title">详情图</label>
+                            <div class="alert-notification custom-field-status"></div>
+                        </div>
+                        <div class="field_hint">展示时按顺序纵向排列，最多10张</div>
+                        <div class="field sku-img-list-field">
+                            {{> ../settings/image_upload_widget
+                                widget = "sku-img-list"
+                                upload_text = '上传详情图'
+                                delete_text = '删除详情图'
+                                disabled_text = ''
+                                is_editable_by_current_user = true
+                                image = ''
+                                new_upload = true
+                                unshow_del_btn = true}}
+                        </div>
+                    </div>
+
+                    <div class="custom_user_field">
+                        <div class="field">
+                            <button class="button small rounded" id="create_sku">创建</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class='sub_unsub_status'></div>
+        </div>
+    </div>
+</div>

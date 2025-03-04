@@ -43,6 +43,7 @@ import * as topic_list from "./topic_list";
 import * as ui_util from "./ui_util";
 import {parse_html} from "./ui_util";
 import * as user_profile from "./user_profile";
+import * as user_work_order from "./user_work_order";
 import * as user_topics from "./user_topics";
 import * as util from "./util";
 
@@ -643,6 +644,7 @@ export function initialize() {
 
     popovers.register_click_handlers();
     user_profile.register_click_handlers();
+    user_work_order.register_click_handlers();
     emoji_picker.register_click_handlers();
     stream_popover.register_click_handlers();
 

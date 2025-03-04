@@ -415,6 +415,17 @@ td .button {
     }
 }
 
+.button-group {
+    display: flex;
+    gap: 10px;
+
+    .button {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+}
+
 .no-margin {
     margin: 0;
 }

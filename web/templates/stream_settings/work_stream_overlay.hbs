@@ -1,0 +1,41 @@
+<div id="work_subscription_overlay" class="overlay new-style" data-overlay="work_subscriptions">
+    <div class="flex overlay-content">
+
+        <div class="work-subscriptions-container modal-bg">
+            <div class='sub_unsub_status'></div>
+            <div class="subscriptions-header">
+                <div class="fa fa-chevron-left"></div>
+                <span class="subscriptions-title">&nbsp;</span>
+                <span class="subscriptions-title normal-title">我的工作流</span>
+                <span class="subscriptions-title detail-title">工作流详情</span>
+                <div class="exit">
+                    <span class="exit-sign">&times;</span>
+                </div>
+            </div>
+            <div class="left">
+                <div class="search-container">
+                    <div id="add_new_stream">
+                        <button class="create_stream_button create_stream_plus_button tippy-zulip-delayed-tooltip" data-tooltip-template-id="create-new-stream-tooltip-template" data-tippy-placement="bottom">
+                            <span>+</span>
+                        </button>
+                        <div class="float-clear"></div>
+                    </div>
+                </div>
+                {{!-- <div class="input-append stream_name_search_section" id="work_stream_filter">
+                    <input type="text" name="stream_name" id="work_search_stream_name" autocomplete="off"
+                      placeholder="过滤" value=""/>
+                    <button type="button" class="btn clear_search_button" id="work_clear_search_stream_name">
+                        <i class="fa fa-remove" aria-hidden="true"></i>
+                    </button>
+                </div> --}}
+                <div class="streams-list work-streams-list">
+                </div>
+            </div>
+            <div class="right">
+                <div class="work-stream-detail">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+{{#if isAll}}
+    <div class="list-tips">
+        已加载全部，可在任意对话中创建新工单
+    </div>
+{{else}}
+    {{#each workList}}
+        <div class="work-item">
+            <div class="work-item-header">
+                <span class="work-title">{{id}}</span>
+                {{!-- <span class="work-status">已提交 待审核</span> --}}
+            </div>
+            <div class="work-item-content">
+                <div class="work-info">
+                    <span class="work-label">创建人</span>
+                    <div class="pill " tabindex="0">
+                        <img class="pill-image" src="{{photo}}">
+                        <span class="pill-value">{{nickname}}</span>
+                    </div>
+                </div>
+                <div class="work-info">
+                    <span class="work-label">加入时间</span>
+                    <div class="value">{{endTime}}</div>
+                </div>
+                <div class="work-info">
+                    <span class="work-label">工作流</span>
+                    <div class="value">{{zimeitiName}}</div>
+                </div>
+                <div class="work-info">
+                    <span class="work-label">关联SKU</span>
+                    <div class="value">{{skuName}}</div>
+                </div>
+            </div>
+            <div class="work-item-footer">
+                <button class="button small rounded compose_mobile_button" data-id="{{id}}">查看</button>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}

@@ -102,6 +102,8 @@ import * as stream_edit_subscribers from "./stream_edit_subscribers";
 import * as stream_list from "./stream_list";
 import * as stream_list_sort from "./stream_list_sort";
 import * as stream_settings_ui from "./stream_settings_ui";
+import * as work_stream_ui from "./work_stream_ui";
+import * as work_sku_ui from "./work_sku_ui";
 import * as sub_store from "./sub_store";
 import * as timerender from "./timerender";
 import * as tippyjs from "./tippyjs";
@@ -704,6 +706,11 @@ export function initialize_everything() {
     user_topics.initialize();
     muted_users.initialize(muted_users_params);
     stream_settings_ui.initialize();
+
+    // 工作流相关
+    work_stream_ui.initialize();
+    work_sku_ui.initialize();
+    
     user_group_settings_ui.initialize();
     top_left_corner.initialize();
     stream_list.initialize({

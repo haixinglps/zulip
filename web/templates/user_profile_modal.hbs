@@ -18,6 +18,12 @@
                     </a>
                     {{/if}}
                 </h1>
+                
+                {{#if groups_of_user.length}}
+                    <div class="user-first-group">
+                        @{{groups_of_user.[0].name}}-{{groups_of_user.[0].description}}
+                    </div>
+                {{/if}}
                 <button class="modal__close" aria-label="{{t 'Close modal' }}" data-micromodal-close></button>
             </div>
             <div id="tab-toggle" class="center"></div>

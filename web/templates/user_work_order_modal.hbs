@@ -1,0 +1,153 @@
+<div class="micromodal" id="user-work-order-modal" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1">
+        <div class="modal__container new-style" role="dialog" aria-modal="true" aria-labelledby="dialog_title">
+            <div class="modal__header subscriptions-header">
+                <div class="fa fa-chevron-left first-left"></div>
+                <div class="fa fa-chevron-left second-left"></div>
+                <div class="fa fa-chevron-left third-left"></div>
+                <div class="fa fa-chevron-left forth-left"></div>
+                <h1 class="modal__title user_profile_name_heading normal_title">
+                    <span class="user_profile_name">全部工单</span>
+                </h1>
+                <h1 class="modal__title user_profile_name_heading detail_title">
+                    <span class="user_profile_name">工单详情</span>
+                </h1>
+                <h1 class="modal__title user_profile_name_heading create_title">
+                    <span class="user_profile_name">创建工单</span>
+                </h1>
+                <h1 class="modal__title user_profile_name_heading feedback_title">
+                    <span class="user_profile_name">反馈</span>
+                </h1>
+                <h1 class="modal__title user_profile_name_heading excep_title">
+                    <span class="user_profile_name">报告异常</span>
+                </h1>
+                <h1 class="modal__title user_profile_name_heading join_members_title">
+                    <span class="user_profile_name">全部参与</span>
+                </h1>
+                <button class="modal__close" aria-label="{{t 'Close modal' }}" data-micromodal-close></button>
+            </div>
+            <div id="tab-toggle" class="center"></div>
+            <main class="modal__body" id="body" data-simplebar data-simplebar-auto-hide="false">
+                <div class="tab-data">
+                    <div class="tabcontent active" id="all-work-tab">
+                        <div class="work-list">
+                        </div>
+                    </div>
+
+
+                    <div class="tabcontent" id="my-work-tab">
+                        <div class="work-list">
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+
+
+            <div class="right">
+                <div class="work-detail" id="user-work-detail">
+
+                </div>
+            </div>
+
+            <div class="create-right">
+                <form class="work-create-form">
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">选择一个工作流</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint">从收藏的工作流中选择一个；可在我的工作流菜单中管理收藏</div>
+                        <div class="field">
+                            <select class="custom_user_field_value settings_select bootstrap-focus-style" id="create-work-stream-select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="stream-steps-box">
+                        <table id="stream-select-steps-table">
+                            <thead>
+                                <tr>
+                                    <th>步骤</th>
+                                    <th>任务名称</th>
+                                    <th>操作说明</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="divider" role="presentation"></div>
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">关联一个商品服务</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint"></div>
+                        <div class="field">
+                            <select class="custom_user_field_value settings_select bootstrap-focus-style" id="create-work-sku-select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="sku-select-box info-sku-list" id="sku-select-item-box">
+                    </div>
+                    <div class="divider" role="presentation"></div>
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">素材提交截至时间</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint">停止接受参与者提交素材的时间</div>
+                        <div class="field">
+                            <input class="custom_user_field_value modal_text_input settings_text_input user-work-end-time-picker" type="text" placeholder="请选择" />
+                        </div>
+                    </div>
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">预计交易额</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint">预估的总预算或总费用￥，实际金额以参与各方实际完成为准此处仅作为参与各方参考金额</div>
+                        <div class="field">
+                            <input class="custom_user_field_value modal_text_input settings_text_input" type="text" placeholder="请输入" id="create-work-money-input" />
+                        </div>
+                    </div>
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">详细说明</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint">参与要求、工作要求、结算安排等；作为结算依据</div>
+                        <div class="field">
+                            <textarea maxlength="5000" class="custom_user_field_value settings_textarea" placeholder="请输入" id="create-work-desc-input"></textarea>
+                        </div>
+                    </div>
+                    <div class="custom_user_field">
+                        <div class="field">
+                            <button class="button small rounded" id="create-user-work-btn">创建</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="feedback-right">
+                <div class="work-detail feedback-detail" id="feedback-detail">
+
+                </div>
+            </div>
+
+            <div class="excep-right">
+                <div class="work-detail feedback-detail excep-detail" id="excep-detail">
+
+                </div>
+            </div>
+
+            <div class="join-members-right">
+                <div class="join-members">
+                    <div class="center join-members-sort-tab">
+                        <div class="tab-switcher large allow-overflow">
+                            <div class="ind-tab first" data-tab-id="2" tabindex="0">待审核</div>
+                            <div class="ind-tab" data-tab-id="3" tabindex="0">待反馈</div>
+                            <div class="ind-tab" data-tab-id="4" tabindex="0">异常待处理</div>
+                            <div class="ind-tab last" data-tab-id="0" tabindex="0">全部</div>
+                        </div>
+                    </div>
+                    <div class="join-member-list join-member-list-all" id="join-member-list-all">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class='sub_unsub_status'></div>
+        </div>
+    </div>
+</div>

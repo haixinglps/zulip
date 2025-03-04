@@ -9,12 +9,14 @@
     {{/if}}
     <div class="image_upload_button {{#unless is_editable_by_current_user}}hide{{/unless}}">
         <div class="image-hover-background"></div>
+        {{#unless unshow_del_btn}}
         <button class="image-delete-button" aria-label="{{ delete_text }}" role="button" tabindex="0">
             &times;
         </button>
         <span class="image-delete-text" aria-label="{{ delete_text }}" tabindex="0">
             {{ delete_text }}
         </span>
+        {{/unless}}
         <span class="image-upload-text" aria-label="{{ upload_text }}" role="button" tabindex="0">
             {{ upload_text }}
         </span>
@@ -23,6 +25,11 @@
         </span>
     </div>
     <img class="image-block" src="{{ image }}"/>
+    {{#if new_upload}}
+    <div class="image-box">
+        <img class="add-icon" src="../../images/icons/add.svg"/>
+    </div>
+    {{/if}}
     <input type="file" name="file_input" class="notvisible image_file_input"  value="{{ upload_text }}" />
     <div class="image_file_input_error text-error"></div>
 </div>
