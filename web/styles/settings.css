@@ -380,6 +380,7 @@ td .button {
 }
 
 .settings_text_input,
+.settings_text_input_new,
 .settings_url_input {
     /* 311px + 2 * 6px (padding) + 2 * 1px (border) = 325px (min width of select
     elements in settings) */
@@ -1993,5 +1994,23 @@ $option_title_width: 180px;
         outline: 0;
         box-shadow: inset 0 1px 1px hsl(0deg 0% 0% / 7.5%),
             0 0 8px hsl(206deg 80% 62% / 60%);
+    }
+}
+
+.new-profile-form-content {
+    display: none;
+
+    &.show {
+        display: block;
+    }
+}
+
+.new-profile-label {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    .new-profile-del-btn {
+        color: #409eff;
     }
 }

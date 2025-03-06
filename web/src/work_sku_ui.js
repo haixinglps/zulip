@@ -798,21 +798,47 @@ export function switch_to_stream_row(stream_id) {
     }, 100);
 }
 
+async function get_sku_tezheng(skuId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/tezheng?skuId=${skuId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取SKU特征失败:', error);
+        return null;
+    }
+}
+
 async function show_right_section(id) {
     show_loading();
 
-    const { code, result } = await channel.get({
-        url: `https://rpa.insfair.cn/zmtapi/sku/get?id=${id}`,
-    });
+    const [skuDetail, skuTezheng] = await Promise.all([
+        channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/get?id=${id}`,
+        }),
+        get_sku_tezheng(id)
+    ]);
 
-    if (code === 200) {
-        result.skuUrl = JSON.parse(result.skuUrl);
+    if (skuDetail.code === 200) {
+        if (skuDetail.result.skuUrl && typeof skuDetail.result.skuUrl === 'string') {
+            try {
+                skuDetail.result.skuUrl = JSON.parse(skuDetail.result.skuUrl);
+            } catch (e) {
+                console.error('skuUrl 解析失败:', e);
+                skuDetail.result.skuUrl = [];
+            }
+        } else {
+            skuDetail.result.skuUrl = [];
+        }
+
         const html = render_work_sku_info({
-            detail: result,
+            detail: skuDetail.result,
+            tezheng: skuTezheng
         });
 
         $("#work_sku_info_tem").html(html);
-        work_sku_edit.setup_my_sku_hash(result);
+        work_sku_edit.setup_my_sku_hash(skuDetail.result);
     }
 
     $(".right").addClass("show");

@@ -8,19 +8,18 @@
                 {{sku.skuName}}
             </div>
             <div class="sku-sales">
-                <span>总交易额 {{sku.money}}</span>
-                <span>纠纷率 1%</span>
-                <span>关联工单 1</span>
+                <span>总交易额 {{#if sku.money}}{{sku.money}}{{else}}0{{/if}}</span>
+                    <span>纠纷率 {{#if sku.excepNum}}{{sku.excepNum}}{{else}}0{{/if}}%</span>
+                {{!-- <span>关联工单 1</span> --}}
             </div>
         </div>
         <div class="sku-bottom">
             <div class="sku-tags">
+                {{#each skuTezheng}}
                 <div class="tag">
-                    粉丝活跃 29
+                    {{tz}} {{tzDetail}}
                 </div>
-                <div class="tag">
-                    粉丝活跃 29
-                </div>
+                {{/each}}
             </div>
         </div>
     </div>

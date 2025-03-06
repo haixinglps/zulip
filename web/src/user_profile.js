@@ -5,6 +5,8 @@ import render_user_group_list_item from "../templates/user_group_list_item.hbs";
 import render_user_profile_modal from "../templates/user_profile_modal.hbs";
 import render_user_stream_list_item from "../templates/user_stream_list_item.hbs";
 import render_youfang_message from "../templates/youfang_message.hbs";
+import render_new_user_profile_top from "../templates/new_user_profile_top.hbs";
+import render_new_user_profile_content from "../templates/new_user_profile_content.hbs";
 
 import * as browser_history from "./browser_history";
 import * as buddy_data from "./buddy_data";
@@ -243,6 +245,7 @@ export async function show_user_profile(user, default_tab_key = "profile-tab") {
     $(".tabcontent").hide();
 
     get_youfang_message(user);
+    get_user_profile_detail(user);
 
     let default_tab = 0;
     // Only checking this tab key as currently we only open this tab directly
@@ -296,6 +299,114 @@ async function get_youfang_message(user) {
 
     $("#youfang_message_box").html(rendered_youfang_message);
 }
+
+async function get_user_news(userId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/news?page=1&size=4&zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户新闻失败:', error);
+        return null;
+    }
+}
+
+async function get_user_quanzhong(userId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/quanzhong?zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户权重失败:', error);
+        return null;
+    }
+}
+
+async function get_user_tezheng(userId, type) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/tezheng?type=${type}&zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户特征失败:', error);
+        return null;
+    }
+}
+
+async function get_user_tj(userId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/tj?zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户统计失败:', error);
+        return null;
+    }
+}
+
+async function get_user_info_list(userId) {
+    try {
+        const { code, result } = await channel.post({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/info/list?zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户资料列表失败:', error);
+        return null;
+    }
+}
+
+async function get_user_sku_list(userId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/list?page=1&size=4&zulipUid=${userId}`,
+        });
+        return code === 200 ? {sku_list: result.list, total: result.total} : null;
+    } catch (error) {
+        console.error('获取用户SKU列表失败:', error);
+        return null;
+    }
+}
+
+async function get_user_profile_detail(user) {
+    const [news, quanzhong, person_tezheng, report_tezheng, tj, info_list, {sku_list, total}] = await Promise.all([
+        get_user_news(user.user_id),
+        get_user_quanzhong(user.user_id),
+        get_user_tezheng(user.user_id, 1),
+        get_user_tezheng(user.user_id, 2),
+        get_user_tj(user.user_id),
+        get_user_info_list(user.user_id),
+        get_user_sku_list(user.user_id)
+    ]);
+
+    const top_profile = render_new_user_profile_top({
+        news,
+        tj
+    });
+    $(".new-avatar-info-box").html(top_profile);
+
+    person_tezheng.forEach((item) => {
+        item.isTop = parseInt(item.rank) <= 10;
+    });
+    report_tezheng.forEach((item) => {
+        item.isTop = parseInt(item.rank) <= 10;
+    });
+
+    const content_profile = render_new_user_profile_content({
+        quanzhong,
+        person_tezheng,
+        report_tezheng,
+        info_list,
+        sku_list,
+        total
+    });
+    $(".new-intro-content").html(content_profile);
+}
+
 
 function handle_remove_stream_subscription(target_user_id, sub, success, failure) {
     if (people.is_my_user_id(target_user_id)) {

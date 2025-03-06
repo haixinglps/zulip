@@ -59,6 +59,28 @@
                     <button class="button small rounded help-submit-material-button" data-gongdan-id="{{gongdanId}}" data-task-id="{{id}}">提交</button>
                 </div>
             </div>
+            {{#if exception}}
+            <div class="material-handler-content reply-excep-form">
+                <div class="material-input-box">
+                    <div class="material-input-item">
+                        对方上报了你的异常：{{excep.url}}
+                    </div>
+                    <div class="material-input-item material-list-excep-reply-box">
+                        请在 <span class="material-list-excep-reply-time"></span> 内回复
+                    </div>
+                </div>
+                <div class="material-input-box">
+                    <div class="material-input-item">
+                        <input class="input material-input reply-excep-material-message" placeholder="请输入异常说明"></input>
+                    </div>
+                </div>
+                <div class="material-submit-status"></div>
+                <div class="add-new-btn-box">
+                    <span>&nbsp;</span>
+                    <button class="button small rounded reply-excep-material-button" data-gongdan-id="{{gongdanId}}" data-task-id="{{id}}" {{#if excep}} data-excep-id="{{excep.id}}" {{/if}}>提交</button>
+                </div>
+            </div>
+            {{/if}}
             <div class="item-footer">
                 <a href="javascript:;" class="help-add-new-material-input">+ 协助提交素材</a>
                 <div class="status-buttons">
@@ -67,8 +89,12 @@
                     {{/if}}
                     {{#unless urls.total}}
                     <div class="status-text">等待提交</div>
-                    {{else if statusException}}
-                    <div class="status-text">你更新了异常情况</div>
+                    {{else if (eq statusException 2)}}
+                        {{!-- {{#if (eq excep.type 0)}}
+                        <div class="status-text">你更新了异常情况</div>
+                        {{else}}
+                        <div class="status-text">对方更新了异常情况</div>
+                        {{/if}} --}}
                     {{/unless}}
                     {{#if (eq status 4)}}
                     <div class="status-text">审核不通过</div>
@@ -76,8 +102,8 @@
                     {{#if isMyReply}}
                     <button class="button small rounded help-show-report-button" data-gongdan-id="{{gongdanId}}" data-task-id="{{id}}" data-excep-status="{{statusException}}">查看异常</button>
                     {{else}}
-                        {{#if (not (eq statusException 0))}}
-                        <button class="button small rounded">处理异常</button>
+                        {{#if (eq statusException 1)}}
+                        <button class="button small rounded handle-reply-show-btn" {{#if excep}} data-end-time="{{excep.timeToReplay}}" {{/if}}>处理异常</button>
                         {{/if}}
                     {{/if}}
 

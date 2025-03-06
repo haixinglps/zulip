@@ -409,10 +409,46 @@ export function hide_confirm_email_banner() {
     $("#account-settings-status").hide();
 }
 
+async function get_user_new_profile_list() {
+    try {
+        const { code, result } = await channel.post({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/info/list?zulipUid=${page_params.user_id}`,
+        });
+
+        if (code === 200 && Array.isArray(result)) {
+            const $container = $(".new-profile-list-content");
+            $container.empty(); // 清空现有内容
+
+            result.forEach(item => {
+                $container.append(`
+                    <div class="custom_user_field">
+                        <label class="inline-block new-profile-label" for="x" class="title">
+                            <span>${item.infoName}</span>
+                            <a href="javascript:;" class="new-profile-del-btn" data-id="${item.id}">删除</a>
+                        </label>
+                        <div class="field">
+                            <input class="custom_user_field_value modal_text_input settings_text_input_new new_profile_info_name" type="text" value="${item.infoUrl}" readonly />
+                        </div>
+                    </div>
+                `);
+            });
+        }
+    } catch (error) {
+        ui_report.error(
+            "获取资料列表失败",
+            error,
+            $("#account-settings-status").expectOne(),
+            2000
+        );
+    }
+}
+
 export function set_up() {
     // Add custom profile fields elements to user account settings.
     add_custom_profile_fields_to_settings();
     $("#account-settings-status").hide();
+
+    get_user_new_profile_list();
 
     const setup_api_key_modal = () => {
         function request_api_key(data) {
@@ -748,6 +784,7 @@ export function set_up() {
     });
 
     $("#profile-settings").on("change", ".custom_user_field_value", function (e) {
+        if($(e.currentTarget).hasClass("settings_text_input_new")) return
         const fields = [];
         const value = $(this).val();
         const field_id = Number.parseInt(
@@ -830,6 +867,179 @@ export function set_up() {
 
         const user = people.get_by_user_id(people.my_current_user_id());
         user_profile.show_user_profile(user);
+    });
+
+    $(".add-new-rpa-profile-btn").on("click", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if($(".new-profile-form-content").hasClass("show")) {
+            $(".new-profile-list").append(`
+                <div class="new-profile-item">
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">新资料名称</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint"></div>
+                        <div class="field">
+                            <input class="custom_user_field_value modal_text_input settings_text_input_new new_profile_info_name" type="text" placeholder="请输入" />
+                        </div>
+                    </div>
+                    <div class="custom_user_field">
+                        <label class="inline-block" for="x" class="title">链接地址</label>
+                        <div class="alert-notification custom-field-status"></div>
+                        <div class="field_hint"></div>
+                        <div class="field">
+                            <input class="custom_user_field_value modal_text_input settings_text_input_new new_profile_info_url" type="text" placeholder="请输入" />
+                        </div>
+                    </div>
+                </div>
+            `)
+        } else {
+            $(".new-profile-form-content").addClass("show");
+        }
+    });
+
+    $("#submit-new-profile-btn").on("click", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const profile_list = [];
+        let hasError = false;
+        $(".new-profile-item").each((i, item) => {
+            const $item = $(item);
+            const profile_name = $item.find(".new_profile_info_name").val();
+            const profile_url = $item.find(".new_profile_info_url").val();
+
+            // 清除之前的错误提示
+            $item.find(".custom-field-status").removeClass("alert-error").empty();
+
+            // 校验名称
+            if (!profile_name) {
+                $item.find(".new_profile_info_name").closest(".custom_user_field")
+                    .find(".custom-field-status")
+                    .addClass("alert-error")
+                    .text("请输入资料名称");
+                hasError = true;
+            }
+
+            // 校验URL
+            if (!profile_url) {
+                $item.find(".new_profile_info_url").closest(".custom_user_field")
+                    .find(".custom-field-status")
+                    .addClass("alert-error")
+                    .text("请输入链接地址");
+                hasError = true;
+            } else if (!/^https?:\/\/.+/.test(profile_url)) {
+                $item.find(".new_profile_info_url").closest(".custom_user_field")
+                    .find(".custom-field-status")
+                    .addClass("alert-error")
+                    .text("请输入有效的URL地址（以http://或https://开头）");
+                hasError = true;
+            }
+
+            if (!hasError && profile_name && profile_url) {
+                profile_list.push({
+                    infoName: profile_name,
+                    infoUrl: profile_url
+                });
+            }
+        });
+
+        if (hasError) {
+            return;
+        }
+
+        const addProfile = async (profile) => {
+            try {
+                const { code, result } = await channel.post({
+                    url: "https://rpa.insfair.cn/zmtapi/zulip/user/info/add",
+                    data: JSON.stringify({
+                        infoName: profile.infoName,
+                        infoUrl: profile.infoUrl,
+                        uid: page_params.user_id
+                    }),
+                    contentType: "application/json",
+                });
+
+                if (code === 200) {
+                    ui_report.success(
+                        "添加成功",
+                        $("#account-settings-status").expectOne(),
+                        2000
+                    );
+
+                    // 添加成功后在页面添加只读展示
+                    $(".new-profile-list-content").append(`
+                        <div class="custom_user_field">
+                            <label class="inline-block" for="x" class="title">${profile.infoName}</label>
+                            <div class="field">
+                                <input class="custom_user_field_value modal_text_input settings_text_input_new new_profile_info_name" type="text" value="${profile.infoUrl}" readonly />
+                            </div>
+                        </div>
+                    `);
+
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                ui_report.error(
+                    "添加失败",
+                    error,
+                    $("#account-settings-status").expectOne(),
+                    2000
+                );
+                return false;
+            }
+        };
+
+        // 串行处理每条资料
+        (async () => {
+            let allSuccess = true;
+            for (const profile of profile_list) {
+                const success = await addProfile(profile);
+                if (!success) {
+                    allSuccess = false;
+                    break;
+                }
+            }
+
+            // 只有全部添加成功才清空表单
+            if (allSuccess) {
+                $(".new-profile-list").empty();
+                $(".new-profile-form-content").removeClass("show");
+            }
+        })();
+
+    });
+
+    $("body").on("click", ".new-profile-del-btn", async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const id = $(e.target).data("id");
+        try {
+            const { code } = await channel.post({
+                url: `https://rpa.insfair.cn/zmtapi/zulip/user/info/del?id=${id}&zulipUid=${page_params.user_id}`,
+            });
+
+            if (code === 200) {
+                // 找到父级元素并删除
+                $(e.target).closest(".custom_user_field").remove();
+
+                ui_report.success(
+                    "删除成功",
+                    $("#account-settings-status").expectOne(),
+                    2000
+                );
+            }
+        } catch (error) {
+            ui_report.error(
+                "删除失败",
+                error,
+                $("#account-settings-status").expectOne(),
+                2000
+            );
+        }
     });
 
     // When the personal settings overlay is opened, we reset

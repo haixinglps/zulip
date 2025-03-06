@@ -10,24 +10,23 @@
 
         <div class="sku-section">
             <div class="sku-id">
-                {{detail.id}}
+                #SKU{{detail.uuid}}
             </div>
             <div class="sku-sales">
-                <span>总交易额 1999</span>
-                <span>纠纷率 1%</span>
-                <span>关联工单 1</span>
+                <span>总交易额 {{#if detail.money}}{{detail.money}}{{else}}0{{/if}}</span>
+                <span>纠纷率 {{#if detail.excepNum}}{{detail.excepNum}}{{else}}0{{/if}}%</span>
+                {{!-- <span>关联工单 1</span> --}}
             </div>
 
             <div class="section-title">
                 全部权重
             </div>
             <div class="sku-tags">
+                {{#each tezheng}}
                 <div class="tag">
-                    粉丝活跃 29
+                    {{tz}} {{tzDetail}}
                 </div>
-                <div class="tag">
-                    粉丝活跃 29
-                </div>
+                {{/each}}
             </div>
         </div>
 

@@ -1090,6 +1090,7 @@ ul {
     }
 
     .info-url-list {
+        margin-top: 10px;
         margin-bottom: 20px;
 
         .url-item {
@@ -2313,8 +2314,17 @@ ul {
             align-items: center;
         }
 
-        .help-submit-form {
+        .help-submit-form,
+        .reply-excep-form {
             display: none;
+        }
+    }
+
+    .reply-excep-form-content {
+        padding-top: 20px;
+
+        .inline-block {
+            font-weight: 600;
         }
     }
 }

@@ -446,8 +446,10 @@ async function get_my_join_status(id) {
                 result.statusException == 4 ? '异常未解决' : '发生异常，请联系管理员'
             );
 
-            if(result.timeoutTag == 1) {
+            if(result.timeoutTag == 1 && result.type == 1) {
                 $(".excep-text-status").html('对方超时未处理，你可以继续选择公示异常');
+            } else if(result.timeoutTag == 1 && result.type == 0) {
+                $(".excep_has_timeout_join").show();
             } else if(result.statusException == 1) {
                 $(".excep-text-status").html('等待对方说明异常情况...');
             } else if(result.statusException == 2) {
@@ -525,6 +527,15 @@ async function get_excep_list(taskId) {
                 $("#excep_close_btn").hide();
             } else {
                 const endTime = result.list[0].timeToReplay ? moment(result.list[0].timeToReplay).format('YYYY-MM-DD HH:mm:ss') : moment(result.list[0].created).add(48, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+                if(result.list[0].type === 0) {
+                    $(".excep_no_reply_creater").show();
+                    $(".excep_no_reply_join").hide();
+                    $("#submit-reply-excep-btn").attr('data-excep-id', result.list[0].id);
+                } else {
+                    $(".excep_no_reply_creater").hide();
+                    $(".excep_no_reply_join").show();
+                }
                 $('.excep_status_countdown').countdown(endTime, function(event) {
                     $(this).html(event.strftime(
                         `%D:%H:%M:%S`
@@ -532,20 +543,26 @@ async function get_excep_list(taskId) {
                 });
             }
         } else {
-            $(".excep_has_reply").show();
-            $(".excep_no_reply").hide();
-            $(".excep_reply_time").html(moment(result.list[0].replyDate).format("YYYY-MM-DD HH:mm:ss"));
+            if(result.list[0].type === 1) {
+                $(".excep_has_reply").show();
+                $(".excep_no_reply").hide();
+                $(".excep_reply_time").html(moment(result.list[0].replyDate).format("YYYY-MM-DD HH:mm:ss"));
 
-            const excepTypeMap = {
-                1: '工单失效',
-                2: '条件变化',
-                3: '付款纠纷',
-                4: '故意不通过',
-                5: '其他类型'
-            };
-            $(".excep_reply_tag").html(excepTypeMap[result.list[0].typeExcep] || '');
-            $(".excep_reply_text").html(result.list[0].reply);
-            $("#excep_close_btn").attr('data-excep-id', result.list[0].id);
+                const excepTypeMap = {
+                    1: '工单失效',
+                    2: '条件变化',
+                    3: '付款纠纷',
+                    4: '故意不通过',
+                    5: '其他类型'
+                };
+                $(".excep_reply_tag").html(excepTypeMap[result.list[0].typeExcep] || '');
+                $(".excep_reply_text").html(result.list[0].reply);
+                $("#excep_close_btn").attr('data-excep-id', result.list[0].id);
+            } else if(result.list[0].type === 0) {
+                $(".excep_has_reply").hide();
+                $(".excep_no_reply").hide();
+                $("#reply-excep-url-input").val(result.list[0].reply);
+            }
         }
 
         return result.list[0].id
@@ -582,7 +599,7 @@ async function set_feedback_form(feedbackId) {
     }
 }
 
-async function set_excep_form(reportId) {
+async function set_excep_form(reportId, isFromList) {
     const { code, result } = await channel.get({
         url: `https://rpa.insfair.cn/zmtapi/gd/exception/detail?id=${reportId}&zulipUid=${page_params.user_id}`,
     });
@@ -600,6 +617,35 @@ async function set_excep_form(reportId) {
                 $tag.addClass('selected');
             }
         });
+
+        if(result.type == 1) {
+            if(result.statusException == 3) {
+                $('.excep_status_buttons').html('你选择了双方已解决此异常');
+            } else if(result.statusException == 2) {
+            }
+        } else if(result.type == 0) {
+            $(".excep_no_reply_join").hide();
+            $(".excep_no_reply_creater .status_title, .excep_no_reply_creater .status_label").hide();
+            if(isFromList) {
+                $(".excep_has_reply").show();
+                $(".excep_no_reply_creater").hide();
+                $(".excep_reply_text").html(result.reply);
+                if(result.statusException == 2) {
+                    $("#excep_close_btn").attr('data-excep-id', result.id);
+                    $("#excep_close_btn").attr('data-form-list', true);
+                } else if(result.statusException == 3) {
+                    $("#excep_close_btn").closest(".excep_status_buttons").html("你选择了双方已解决此异常");
+                }
+            } else {
+                if(result.statusException == 3) {
+                    $("#submit-reply-excep-btn").closest(".custom_user_field").html('对方已确认解决了此异常');
+                } else if(result.statusException == 2) {
+                    $("#submit-reply-excep-btn").closest(".custom_user_field").html('等待报告方确认解决...');
+                } else if(result.statusException == 4) {
+                    $("#submit-reply-excep-btn").closest(".custom_user_field").html('对方认为此异常为解决');
+                }
+            }
+        }
     }
 }
 
@@ -653,10 +699,33 @@ async function show_excep_section(id, isShowDetail, taskId, statusException, isF
 
     if (code === 200) {
         result.endTime = moment(result.endTime).format("YYYY-MM-DD HH:mm:ss");
+        const user = people.get_by_user_id(parseInt(result.creater));
+
+        const [quanzhong, person_tezheng, report_tezheng, tj, skuTezheng] = await Promise.all([
+            get_user_quanzhong(result.creater),
+            get_user_tezheng(result.creater, 1),
+            get_user_tezheng(result.creater, 2),
+            get_user_tj(result.creater),
+            get_sku_tezheng(id),
+        ]);
+        person_tezheng.forEach((item) => {
+            item.isTop = parseInt(item.rank) <= 10;
+        });
+        report_tezheng.forEach((item) => {
+            item.isTop = parseInt(item.rank) <= 10;
+        });
+
+
         const isMycreated = result.creater == page_params.user_id
         const html = render_user_work_excep({
             detail: result,
             isMycreated,
+            creater: user,
+            quanzhong,
+            person_tezheng,
+            report_tezheng,
+            tj,
+            skuTezheng,
             isShowDetail
         });
 
@@ -678,12 +747,11 @@ async function show_excep_section(id, isShowDetail, taskId, statusException, isF
 
         $(".third-left").attr("data-gongdan-id", id);
 
+        $('.excep_title .user_profile_name').html('报告异常');
         if(isShowDetail) {
             const reportId = await get_excep_list(taskId);
-            set_excep_form(reportId);
-            if(statusException == 3) {
-                $('.excep_status_buttons').html('你选择了双方已解决此异常');
-            }
+            $('.excep_title .user_profile_name').html('查看异常');
+            set_excep_form(reportId, isFromList);
         }
         hide_loading();
     }
@@ -764,6 +832,54 @@ async function show_join_members_section(id, status, isLoadMore) {
     hide_loading();
 }
 
+async function get_user_quanzhong(userId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/quanzhong?zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户权重失败:', error);
+        return null;
+    }
+}
+
+async function get_user_tezheng(userId, type) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/tezheng?type=${type}&zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户特征失败:', error);
+        return null;
+    }
+}
+
+async function get_user_tj(userId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/tj?zulipUid=${userId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取用户统计失败:', error);
+        return null;
+    }
+}
+
+async function get_sku_tezheng(skuId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/tezheng?skuId=${skuId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取SKU特征失败:', error);
+        return null;
+    }
+}
+
 async function show_right_section(id) {
     show_loading();
     const { code, result } = await channel.get({
@@ -772,10 +888,33 @@ async function show_right_section(id) {
 
     if (code === 200) {
         result.endTime = moment(result.endTime).format("YYYY-MM-DD HH:mm:ss");
+        const user = people.get_by_user_id(parseInt(result.creater));
+
+        const [quanzhong, person_tezheng, report_tezheng, tj, skuTezheng] = await Promise.all([
+            get_user_quanzhong(result.creater),
+            get_user_tezheng(result.creater, 1),
+            get_user_tezheng(result.creater, 2),
+            get_user_tj(result.creater),
+            get_sku_tezheng(id),
+        ]);
+        person_tezheng.forEach((item) => {
+            item.isTop = parseInt(item.rank) <= 10;
+        });
+        report_tezheng.forEach((item) => {
+            item.isTop = parseInt(item.rank) <= 10;
+        });
+
+
         const isMycreated = result.creater == page_params.user_id
         const html = render_user_work_detail({
             detail: result,
             isMycreated,
+            creater: user,
+            quanzhong,
+            person_tezheng,
+            report_tezheng,
+            tj,
+            skuTezheng
         });
 
         $("#user-work-detail").html(html);
@@ -1041,10 +1180,15 @@ export function register_click_handlers() {
     $("body").on("change", "#create-work-sku-select", async function() {
         const selectedId = $(this).val();
         if (selectedId) {
-            const detail = await get_work_sku_detail(selectedId);
+            const [detail, skuTezheng] = await Promise.all([
+                get_work_sku_detail(selectedId),
+                get_sku_tezheng(selectedId),
+            ]);
+
             if (detail) {
                 const html = render_user_work_sku_item({
-                    sku: detail
+                    sku: detail,
+                    skuTezheng,
                 });
                 $("#sku-select-item-box").html(html);
             }
@@ -1171,14 +1315,17 @@ export function register_click_handlers() {
 
     $("body").on("click", ".join-button", async (e) => {
         const id = $(e.currentTarget).data('id');
+        const endTime = $(e.currentTarget).data('end-time');
 
         const { code, result } = await channel.post({
             url: `https://rpa.insfair.cn/zmtapi/gongdan/accept?id=${id}&zulipUid=${page_params.user_id}`,
         });
         if(code === 200) {
-            get_gongdan_user_list_two(id);
+            get_gongdan_user_list(id);
+            get_my_join_info(id, endTime);
             const currentCount = parseInt($('.join-member-count').html()) || 0;
             $('.join-member-count').html(currentCount + 1);
+            $('.show-report-button').hide();
             $('.material-handler-content').fadeIn(300);
             $(e.currentTarget).fadeOut(300);
         }
@@ -1412,6 +1559,58 @@ export function register_click_handlers() {
 
     });
 
+    $("body").on("click", ".reply-excep-material-button", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const $item = $(e.currentTarget).closest('.join-member-item');
+        const excepId = $(e.currentTarget).data('excep-id');
+        const message = $item.find('.reply-excep-material-message').val().trim();
+
+        if (!message) {
+            $item.find('.reply-excep-material-message')
+                .closest(".custom_user_field")
+                .find(".custom-field-status")
+                .addClass("alert-error")
+                .html("请输入回复内容")
+                .show();
+            return;
+        }
+
+        channel.post({
+            url: "https://rpa.insfair.cn/zmtapi/gd/exception/deal",
+            data: JSON.stringify({
+                id: excepId,
+                message: message,
+                uid: page_params.user_id
+            }),
+            contentType: "application/json",
+            success({code, result}) {
+                if(code === 200) {
+                    // 禁用输入框
+                    $item.find('.reply-excep-material-message').prop('readonly', true);
+                    // 隐藏提交按钮
+                    $(e.currentTarget).hide();
+                    // 隐藏回复表单
+                    $item.find('.reply-excep-form').slideUp();
+                    // 在父级添加等待确认文字
+                    $(e.currentTarget)
+                        .closest(".custom_user_field")
+                        .append('<div class="waiting-confirm">已回复，等待报告方确认解决</div>');
+                }
+            },
+            error(xhr) {
+                const error_message = xhr.responseJSON?.message || "提交失败";
+                ui_report.client_error(
+                    `提交失败:${error_message}`,
+                    $('.excep-submit-status'),
+                    1200,
+                );
+            }
+        });
+    });
+
+
     $('body').on('click', '.report-material-button', (e) => {
         const id = $(e.currentTarget).data('id');
         show_excep_section(id);
@@ -1425,6 +1624,26 @@ export function register_click_handlers() {
 
     $('body').on('click', '.help-add-new-material-input', (e) => {
         $(e.currentTarget).closest('.join-member-item').find('.help-submit-form').slideDown();
+    })
+
+    $('body').on('click', '.handle-reply-show-btn', (e) => {
+        const endTime = $(e.currentTarget).data('end-time');
+        if(moment().valueOf() > endTime) {
+            $(e.currentTarget).closest('.join-member-item').find('.material-input-box').hide();
+            $(e.currentTarget).closest('.join-member-item').find('.add-new-btn-box').hide();
+            $(e.currentTarget).closest('.join-member-item').find('.material-list-excep-reply-box').html("已超出回复时间");
+        } else {
+            $(e.currentTarget).closest('.join-member-item').find('.material-list-excep-reply-time').countdown(moment(endTime).format('YYYY-MM-DD HH:mm:ss'), function(event) {
+                $(this).html(event.strftime(
+                    `%D:%H:%M:%S`
+                ));
+            }).on('finish.countdown', function() {
+                $(this).closest('.join-member-item').find('.material-list-excep-reply-box').html("已超出回复时间");
+                $(e.currentTarget).closest('.join-member-item').find('.material-input-box').hide();
+                $(e.currentTarget).closest('.join-member-item').find('.add-new-btn-box').hide();
+            });
+        }
+        $(e.currentTarget).closest('.join-member-item').find('.reply-excep-form').slideDown();
     })
 
 
@@ -1661,11 +1880,62 @@ export function register_click_handlers() {
         });
     });
 
+    $("body").on("click", "#submit-reply-excep-btn", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const excepId = $(e.currentTarget).data('excep-id');
+        const message = $("#reply-excep-url-input").val().trim();
+
+        if (!message) {
+            $("#reply-excep-url-input")
+                .closest(".custom_user_field")
+                .find(".custom-field-status")
+                .addClass("alert-error")
+                .html("请输入回复内容")
+                .show();
+            return;
+        }
+
+        channel.post({
+            url: "https://rpa.insfair.cn/zmtapi/gd/exception/deal",
+            data: JSON.stringify({
+                id: excepId,
+                message: message,
+                uid: page_params.user_id
+            }),
+            contentType: "application/json",
+            success({code, result}) {
+                if(code === 200) {
+                    // 禁用输入框
+                    $("#reply-excep-url-input").prop('readonly', true);
+                    // 隐藏提交按钮
+                    $(e.currentTarget).hide();
+                    // 在父级添加等待确认文字
+                    $(e.currentTarget)
+                        .closest(".custom_user_field")
+                        .append('<div class="waiting-confirm">已回复，等待报告方确认解决</div>');
+
+                    // 更新状态显示
+                    $('.excep_no_reply_creater .status_title').text('您已提供异常情况说明');
+                    $('.excep_no_reply_creater .status_label').hide();
+                }
+            },
+            error(xhr) {
+                const error_message = xhr.responseJSON?.message || "提交失败";
+                ui_report.client_error(
+                    `提交失败:${error_message}`,
+                    $('.excep-submit-status'),
+                    1200,
+                );
+            }
+        });
+    });
 
     $("body").on("click", "#excep_close_btn", (e) => {
         e.stopPropagation();
         e.preventDefault();
         const excepId = $(e.currentTarget).data('excep-id');
+        const isFromList = $(e.currentTarget).data('from-list');
 
         channel.post({
             url: `https://rpa.insfair.cn/zmtapi/gd/exception/close?id=${excepId}&status=3&zulipUid=${page_params.user_id}`,
@@ -1820,6 +2090,7 @@ export function register_click_handlers() {
         $("#user-work-order-modal-holder .subscriptions-header").removeClass("slide-excep-left");
 
         if(isFromList) {
+            // show_join_members_section(id, 2);
             $("#user-work-order-modal-holder .join-members-right").addClass("show");
             $("#user-work-order-modal-holder .subscriptions-header").addClass("slide-join-members-left");
             browser_history.update("#user-work/members/" + id);
