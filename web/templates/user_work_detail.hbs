@@ -1,10 +1,14 @@
 <div class="work-detail-header">
     <span class="work-title work-detail-title">#GD{{detail.uuid}}</span>
-    {{#if (eq detail.cyStatus 1)}}
-    <span class="work-status user-work-join-status">已提交 待审核</span>
-    {{/if}}
-    {{#if isMycreated}}
+
+    {{#if isOutOfTime}}
+    <span class="work-status user-work-join-statusx red" style="color: red;">提交已截止</span>
+    {{else if isMycreated}}
     <span class="work-status user-work-join-status green">开放参与</span>
+    {{else}}
+        {{#if (eq detail.cyStatus 1)}}
+        <span class="work-status user-work-join-status">已提交 待审核</span>
+        {{/if}}
     {{/if}}
 </div>
 <div class="work-builder-info">
@@ -163,9 +167,11 @@
     <div class="material-submit-status"></div>
     <div class="buttons material-handler-buttons">
         <button class="button small rounded submit-material-button">提交</button>
-        <span class="excep-text-status"></span>
-        <button class="button small rounded report-material-button" data-id="{{detail.id}}">报告异常</button>
-        <button class="button small rounded show-report-button" data-id="{{detail.id}}">查看异常</button>
+        <div>
+            <span class="excep-text-status"></span>
+            <button class="button small rounded report-material-button" data-id="{{detail.id}}">报告异常</button>
+            <button class="button small rounded show-report-button" data-id="{{detail.id}}">查看异常</button>
+        </div>
     </div>
     <div class="feedback-handler-box">
         <button class="button small feedback-button" data-id="{{detail.id}}">立即反馈</button>

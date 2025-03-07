@@ -9,7 +9,7 @@
 </div>
 <div class="work-builder-info">
     <div class="info-top">
-        <span class="info-label">创建人</span>
+        <span class="info-label">{{#if isFromList}}参与人{{else}}创建人{{/if}}</span>
         <div class="value">{{creater.full_name}}</div>
     </div>
     <div class="info-content">
@@ -73,13 +73,6 @@
         <div class="alert-notification custom-field-status"></div>
         <div class="field_hint">真实反馈将快速提升你的反馈权重</div>
         <div class="field tag-box feedback-tags-box {{#if isShowDetail}}readonly-tag{{/if}}">
-            <span class="feedback-tag" data-type="creater" data-value="星期一">星期一</span>
-            <span class="feedback-tag" data-type="creater" data-value="星期二">星期二</span>
-            <span class="feedback-tag" data-type="creater" data-value="星期三">星期三</span>
-            <span class="feedback-tag" data-type="creater" data-value="星期四">星期四</span>
-            <span class="feedback-tag" data-type="sku" data-value="星期五">星期五</span>
-            <span class="feedback-tag" data-type="sku" data-value="星期六">星期六</span>
-            <span class="feedback-tag" data-type="sku" data-value="星期日">星期日</span>
         </div>
     </div>
     <div class="custom_user_field">

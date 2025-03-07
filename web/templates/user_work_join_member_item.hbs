@@ -17,7 +17,23 @@
                 </div>
             </div>
             <div class="handler">
+                {{#if (eq status 0)}}
                 <span>等待提交</span>
+                {{else if (eq status 1)}}
+                <span>已提交</span>
+                {{else if (eq status 2)}}
+                <span>审核中</span>
+                {{else if (eq status 3)}}
+                <span>审核通过待反馈</span>
+                {{else if (eq status 4)}}
+                <span>审核不通过</span>
+                {{else if (eq status 5)}}
+                <span>审核通过 工单完成</span>
+                {{else if (eq status 6)}}
+                <span>审核通过但是过期未反馈</span>
+                {{else if (eq status 7)}}
+                <span>超时未提交素材</span>
+                {{/if}}
             </div>
         </div>
     {{/each}}

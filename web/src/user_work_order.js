@@ -446,14 +446,14 @@ async function get_my_join_status(id) {
                 result.statusException == 4 ? '异常未解决' : '发生异常，请联系管理员'
             );
 
-            if(result.timeoutTag == 1 && result.type == 1) {
+            if(result.timeoutTag == 1 && result.excepCreater != page_params.user_id) {
                 $(".excep-text-status").html('对方超时未处理，你可以继续选择公示异常');
-            } else if(result.timeoutTag == 1 && result.type == 0) {
+            } else if(result.timeoutTag == 1 && result.excepCreater == page_params.user_id) {
                 $(".excep_has_timeout_join").show();
             } else if(result.statusException == 1) {
-                $(".excep-text-status").html('等待对方说明异常情况...');
+                $(".excep-text-status").html(result.excepCreater == page_params.user_id ? '等待对方说明异常情况...' : '等待你说明异常情况...');
             } else if(result.statusException == 2) {
-                $(".excep-text-status").html('对方更新了异常说明');
+                $(".excep-text-status").html(result.excepCreater == page_params.user_id ? '对方更新了异常说明' : '你更新了异常说明');
             }
 
             if(result.statusException) {
@@ -519,6 +519,7 @@ async function get_excep_list(taskId) {
         if(!result.list[0].statusException) {
             $(".excep_no_reply").show();
             $(".excep_has_reply").hide();
+
             if(result.list[0].timeToReplay && (moment().valueOf() > result.list[0].timeToReplay)) {
                 $(".excep_has_reply").show();
                 $(".excep_no_reply").hide();
@@ -625,9 +626,14 @@ async function set_excep_form(reportId, isFromList) {
             }
         } else if(result.type == 0) {
             $(".excep_no_reply_join").hide();
-            $(".excep_no_reply_creater .status_title, .excep_no_reply_creater .status_label").hide();
+            if(result.user == page_params.user_id)
+                $(".excep_no_reply_creater .status_title, .excep_no_reply_creater .status_label").hide();
+
             if(isFromList) {
-                $(".excep_has_reply").show();
+
+                if(result.statusException) $(".excep_has_reply").show();
+                else $(".excep_no_reply_join").show();
+
                 $(".excep_no_reply_creater").hide();
                 $(".excep_reply_text").html(result.reply);
                 if(result.statusException == 2) {
@@ -649,7 +655,43 @@ async function set_excep_form(reportId, isFromList) {
     }
 }
 
-async function show_feedback_section(id, isShowDetail, taskId, isFromList) {
+async function set_sku_recommond_list(skuId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/tezheng/recommond?skuId=${skuId}`,
+        });
+
+        if (code === 200 && result) {
+            const tags = result.map(item => `
+                <span class="feedback-tag" data-type="sku" data-value="${item.tz}">${item.tz}</span>
+            `).join('');
+
+            $('.feedback-tags-box').append(tags);
+        }
+    } catch (error) {
+        console.error('获取SKU特征推荐失败:', error);
+    }
+}
+
+async function set_person_recommond_list(zulipUid) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/zulip/user/tezheng/recommond?zulipUid=${zulipUid}`,
+        });
+
+        if (code === 200 && result) {
+            const tags = result.map(item => `
+                <span class="feedback-tag" data-type="creater" data-value="${item.tz}">${item.tz}</span>
+            `).join('');
+
+            $('.feedback-tags-box').append(tags);
+        }
+    } catch (error) {
+        console.error('获取用户特征推荐失败:', error);
+    }
+}
+
+async function show_feedback_section(id, isShowDetail, taskId, isFromList, joinUserId) {
     show_loading();
     const { code, result } = await channel.get({
         url: `https://rpa.insfair.cn/zmtapi/gongdan/detail?id=${id}&zulipUid=${page_params.user_id}`,
@@ -658,13 +700,39 @@ async function show_feedback_section(id, isShowDetail, taskId, isFromList) {
     if (code === 200) {
         result.endTime = moment(result.endTime).format("YYYY-MM-DD HH:mm:ss");
         const isMycreated = result.creater == page_params.user_id
+        const user = people.get_by_user_id(parseInt(isFromList ? joinUserId : result.creater));
+
+        const [quanzhong, person_tezheng, report_tezheng, tj, skuTezheng] = await Promise.all([
+            get_user_quanzhong(isFromList ? joinUserId : result.creater),
+            get_user_tezheng(isFromList ? joinUserId : result.creater, 1),
+            get_user_tezheng(isFromList ? joinUserId : result.creater, 2),
+            get_user_tj(isFromList ? joinUserId : result.creater),
+            get_sku_tezheng(id),
+        ]);
+        person_tezheng.forEach((item) => {
+            item.isTop = parseInt(item.rank) <= 10;
+        });
+        report_tezheng.forEach((item) => {
+            item.isTop = parseInt(item.rank) <= 10;
+        });
+
         const html = render_user_work_feedback({
             detail: result,
             isMycreated,
-            isShowDetail
+            isShowDetail,
+            creater: user,
+            isFromList,
+            quanzhong,
+            person_tezheng,
+            report_tezheng,
+            tj,
+            skuTezheng,
         });
 
         $("#feedback-detail").html(html);
+        if(!isFromList) set_sku_recommond_list(result.skuId);
+        else $("#submit-feedback-btn").attr("data-task-id", taskId);
+        set_person_recommond_list(isFromList ? joinUserId : result.creater);
 
         if(isFromList) {
             $("#user-work-order-modal-holder .join-members-right").removeClass("show");
@@ -691,7 +759,7 @@ async function show_feedback_section(id, isShowDetail, taskId, isFromList) {
     }
 }
 
-async function show_excep_section(id, isShowDetail, taskId, statusException, isFromList) {
+async function show_excep_section(id, isShowDetail, taskId, statusException, isFromList, joinUserId) {
     show_loading();
     const { code, result } = await channel.get({
         url: `https://rpa.insfair.cn/zmtapi/gongdan/detail?id=${id}&zulipUid=${page_params.user_id}`,
@@ -699,13 +767,13 @@ async function show_excep_section(id, isShowDetail, taskId, statusException, isF
 
     if (code === 200) {
         result.endTime = moment(result.endTime).format("YYYY-MM-DD HH:mm:ss");
-        const user = people.get_by_user_id(parseInt(result.creater));
+        const user = people.get_by_user_id(parseInt(isFromList ? joinUserId : result.creater));
 
         const [quanzhong, person_tezheng, report_tezheng, tj, skuTezheng] = await Promise.all([
-            get_user_quanzhong(result.creater),
-            get_user_tezheng(result.creater, 1),
-            get_user_tezheng(result.creater, 2),
-            get_user_tj(result.creater),
+            get_user_quanzhong(isFromList ? joinUserId : result.creater),
+            get_user_tezheng(isFromList ? joinUserId : result.creater, 1),
+            get_user_tezheng(isFromList ? joinUserId : result.creater, 2),
+            get_user_tj(isFromList ? joinUserId : result.creater),
             get_sku_tezheng(id),
         ]);
         person_tezheng.forEach((item) => {
@@ -726,7 +794,8 @@ async function show_excep_section(id, isShowDetail, taskId, statusException, isF
             report_tezheng,
             tj,
             skuTezheng,
-            isShowDetail
+            isShowDetail,
+            isFromList
         });
 
         $("#excep-detail").html(html);
@@ -767,6 +836,7 @@ async function set_pass_task(id, type, btn) {
         // 隐藏审核按钮
         btn.closest('.join-member-item').find('.pass-material-btn').hide();
         btn.closest('.join-member-item').find('.nopass-material-btn').hide();
+        btn.closest('.join-member-item').find('.help-report-material-button').hide();
 
         // 根据审核类型添加不同的元素
         if (type === 4) {
@@ -810,6 +880,8 @@ async function show_join_members_section(id, status, isLoadMore) {
             item.urls.list.forEach(el => {
                 el.created = moment(el.created).format("YYYY-MM-DD HH:mm:ss");
             });
+            const myFeedback = item.feedbacks.list.find(el => el.user == page_params.user_id)
+            item.isFeedback = item.status == 5 || myFeedback
         });
         const html = render_user_work_join_member_material_item({
             user_list: result.list,
@@ -889,6 +961,7 @@ async function show_right_section(id) {
     if (code === 200) {
         result.endTime = moment(result.endTime).format("YYYY-MM-DD HH:mm:ss");
         const user = people.get_by_user_id(parseInt(result.creater));
+        const isOutOfTime = moment(result.endTime).valueOf() <= moment().valueOf();
 
         const [quanzhong, person_tezheng, report_tezheng, tj, skuTezheng] = await Promise.all([
             get_user_quanzhong(result.creater),
@@ -914,7 +987,8 @@ async function show_right_section(id) {
             person_tezheng,
             report_tezheng,
             tj,
-            skuTezheng
+            skuTezheng,
+            isOutOfTime
         });
 
         $("#user-work-detail").html(html);
@@ -1339,15 +1413,21 @@ export function register_click_handlers() {
     $("body").on("click", ".feedback-material-btn", async (e) => {
         const id = $(e.currentTarget).data('gongdan-id');
         const userId = $(e.currentTarget).data('user-id');
-        console.log(userId);
-        console.log(people.get_by_user_id(6))
-        show_feedback_section(id, false, '', true);
+        const taskId = $(e.currentTarget).data('id');
+        show_feedback_section(id, false, taskId, true, userId);
     })
 
     $("body").on("click", ".show-feedback-button", async (e) => {
         const id = $(e.currentTarget).data('id');
         const taskId = $(".material-handler-content").data('task-id');
         show_feedback_section(id, true, taskId);
+    })
+
+    $("body").on("click", ".show-feedback-material-btn", async (e) => {
+        const id = $(e.currentTarget).data('gongdan-id');
+        const userId = $(e.currentTarget).data('user-id');
+        const taskId = $(e.currentTarget).data('id');
+        show_feedback_section(id, true, taskId, true, userId);
     })
 
     $("body").on("click", ".add-new-material-input", (e) => {
@@ -1535,6 +1615,8 @@ export function register_click_handlers() {
                             </div>
                         </div>
                     `).join('');
+
+                    $(e.currentTarget).closest('.join-member-item').find(".no-material-text").hide();
                     $(e.currentTarget).closest('.join-member-item').find(".material-url-box").prepend(newUrlItems);
                     // 清空输入框
                     $inputs.val('');
@@ -1619,7 +1701,8 @@ export function register_click_handlers() {
     $('body').on('click', '.help-report-material-button', (e) => {
         const gongdanId = $(e.currentTarget).data('gongdan-id');
         const taskId = $(e.currentTarget).data('task-id');
-        show_excep_section(gongdanId, false, taskId, '', true);
+        const userId = $(e.currentTarget).data('user-id');
+        show_excep_section(gongdanId, false, taskId, '', true, userId);
     })
 
     $('body').on('click', '.help-add-new-material-input', (e) => {
@@ -1669,7 +1752,8 @@ export function register_click_handlers() {
         const gongdanId = $(e.currentTarget).data('gongdan-id');
         const taskId = $(e.currentTarget).data('task-id');
         const statusException = $(e.currentTarget).data('excep-status');
-        show_excep_section(gongdanId, true, taskId, statusException, true);
+        const userId = $(e.currentTarget).data('user-id');
+        show_excep_section(gongdanId, true, taskId, statusException, true, userId);
     })
 
 
@@ -1723,17 +1807,17 @@ export function register_click_handlers() {
         const url = $("#feedback-url-input").val().trim();
         const money = $("#feedback-money-input").val().trim();
         const gongdanId = $('.second-left').data('gongdan-id');
-        const taskId = $('.material-handler-content').data('task-id');
+        const taskId = $('.material-handler-content').data('task-id') || $(e.currentTarget).data('task-id');
 
-        if (createrTags.length === 0 && skuTags.length === 0) {
-            $(".feedback-tags-box")
-                .closest(".custom_user_field")
-                .find(".custom-field-status")
-                .addClass("alert-error")
-                .html("请至少选择一个特征")
-                .show();
-            return;
-        }
+        // if (createrTags.length === 0 && skuTags.length === 0) {
+        //     $(".feedback-tags-box")
+        //         .closest(".custom_user_field")
+        //         .find(".custom-field-status")
+        //         .addClass("alert-error")
+        //         .html("请至少选择一个特征")
+        //         .show();
+        //     return;
+        // }
 
         if (!url) {
             $("#feedback-url-input")
