@@ -23,19 +23,22 @@
 {{/if}}
 
 <span class="alert-msg"></span>
-
-<a {{#unless msg/locally_echoed}}href="{{ msg/url }}"{{/unless}} class="message_time{{#if status_message}} status-time{{/if}}">
-    {{#unless include_sender}}
-    <span class="copy-paste-text">&nbsp;</span>
-    {{/unless}}
-    {{timestr}}
-</a>
+{{#if include_sender}}
+    <a {{#unless msg/locally_echoed}}href="{{ msg/url }}"{{/unless}} class="message_time{{#if status_message}} status-time{{/if}}">
+        {{#unless include_sender}}
+        <span class="copy-paste-text">&nbsp;</span>
+        {{/unless}}
+        {{timestr}}
+    </a>
+{{/if}}
 
 {{#if msg/locally_echoed}}
     <span class="fa fa-circle-o-notch slow-send-spinner hidden"></span>
 {{/if}}
 
-{{> message_controls}}
+{{#if include_sender}}
+    {{> message_controls}}
+{{/if}}
 
 {{#unless status_message}}
     {{#unless is_hidden}}
