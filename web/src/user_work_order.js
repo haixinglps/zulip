@@ -1454,25 +1454,24 @@ export function register_click_handlers() {
             .find('.material-input-box input');
 
         const urls = [];
-        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-
         let hasInvalidUrl = false;
         $inputs.each(function() {
             const value = $(this).val().trim();
-            if (value) {
-                if (!urlPattern.test(value)) {
-                    $(this).addClass('invalid');
-                    hasInvalidUrl = true;
-                } else {
-                    $(this).removeClass('invalid');
-                    urls.push(value);
-                }
+            if (!value) {
+                $(this).addClass('invalid');
+                hasInvalidUrl = true;
+            } else if (value.length > 5000) {
+                $(this).addClass('invalid');
+                hasInvalidUrl = true;
+            } else {
+                $(this).removeClass('invalid');
+                urls.push(value);
             }
         });
 
         if (hasInvalidUrl) {
             ui_report.client_error(
-                $t_html({defaultMessage: "请输入有效的URL链接"}),
+                $t_html({defaultMessage: "请输入有效的链接"}),
                 $('.material-submit-status'),
                 1200,
             );
@@ -1548,26 +1547,25 @@ export function register_click_handlers() {
             .find('.material-input-box input');
 
         const urls = [];
-        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-
         let hasInvalidUrl = false;
         $inputs.each(function() {
             const value = $(this).val().trim();
-            if (value) {
-                if (!urlPattern.test(value)) {
-                    $(this).addClass('invalid');
-                    hasInvalidUrl = true;
-                } else {
-                    $(this).removeClass('invalid');
-                    urls.push(value);
-                }
+            if (!value) {
+                $(this).addClass('invalid');
+                hasInvalidUrl = true;
+            } else if (value.length > 5000) {
+                $(this).addClass('invalid');
+                hasInvalidUrl = true;
+            } else {
+                $(this).removeClass('invalid');
+                urls.push(value);
             }
         });
 
         if (hasInvalidUrl) {
             ui_report.client_error(
-                $t_html({defaultMessage: "请输入有效的URL链接"}),
-                $('.help-submit-form .material-submit-status'),
+                $t_html({defaultMessage: "请输入有效的链接"}),
+                $('.material-submit-status'),
                 1200,
             );
             return;
@@ -2229,7 +2227,7 @@ export function hide_loading() {
 async function render_all_work_order_list(isReload) {
     show_loading();
     const { code, result: { list , pages, total} } = await channel.get({
-        url: `https://rpa.insfair.cn/zmtapi/gongdan/list?page=${allWorkPage}&size=${pageSize}&zulipUid=${page_params.user_id}`,
+        url: `https://rpa.insfair.cn/zmtapi/gongdan/list/operate?page=${allWorkPage}&size=${pageSize}&zulipUid=${page_params.user_id}`,
     });
 
     if(code === 200) {
@@ -2307,7 +2305,7 @@ export async function show_user_work_order(default_tab_key = "all-work-tab", sec
         selected: default_tab,
         child_wants_focus: true,
         values: [
-            {label: '全部', key: "all-work-tab"},
+            {label: '我参与的', key: "all-work-tab"},
             {label: '我发起的', key: "my-work-tab"},
         ],
         callback(name, key) {

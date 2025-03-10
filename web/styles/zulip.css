@@ -1049,6 +1049,12 @@ li.actual-dropdown-menu i {
     padding: 6px 12px;
 }
 
+.top-new-avatar {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+
 td.pointer {
     vertical-align: top;
     padding-top: 10px;

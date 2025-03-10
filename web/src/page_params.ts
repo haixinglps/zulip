@@ -3,6 +3,7 @@ import $ from "jquery";
 const t1 = performance.now();
 export const page_params: {
     apps_page_url: string;
+    avatar_url: string;
     corporate_enabled: boolean;
     language_list: {
         code: string;

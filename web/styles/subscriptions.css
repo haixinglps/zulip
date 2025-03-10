@@ -1722,6 +1722,17 @@ div.settings-radio-input-parent {
 
     .work-sku-form {
         padding: 30px 20px;
+
+        .field {
+            box-sizing: border-box;
+
+            & input {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 4px 6px;
+                height: 30px;
+            }
+        }
     }
 
     .custom_user_field {

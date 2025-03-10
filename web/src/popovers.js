@@ -767,7 +767,8 @@ export function register_click_handlers() {
         } else {
             user = people.get_by_email(email);
         }
-        show_user_info_popover_for_message(this, user, message);
+        user_profile.show_user_profile(user);
+        // show_user_info_popover_for_message(this, user, message);
     });
 
     $("#main_div").on("click", ".user-group-mention", function (e) {
