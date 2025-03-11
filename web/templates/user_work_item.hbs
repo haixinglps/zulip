@@ -18,8 +18,12 @@
                     </div>
                 </div>
                 <div class="work-info">
+                    {{#if isMy}}
+                    <span class="work-label">创建时间</span>
+                    {{else}}
                     <span class="work-label">加入时间</span>
-                    <div class="value">{{endTime}}</div>
+                    {{/if}}
+                    <div class="value">{{created}}</div>
                 </div>
                 <div class="work-info">
                     <span class="work-label">工作流</span>
@@ -31,7 +35,11 @@
                 </div>
             </div>
             <div class="work-item-footer">
+                {{#if isMy}}
                 <button class="button small rounded compose_mobile_button" data-id="{{id}}">查看</button>
+                {{else}}
+                <button class="button small rounded compose_mobile_button" data-id="{{gongdanId}}">查看</button>
+                {{/if}}
             </div>
         </div>
     {{/each}}

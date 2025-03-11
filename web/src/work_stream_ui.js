@@ -1320,6 +1320,13 @@ async function ajaxCollectStream(id) {
         close_on_click_out: true,
         on_click: () => {},
     });
+
+    if (code === 200) {
+        $("#work_streams_overlay_container .streams-list")
+            .find(`button[data-id='${id}']`)
+            .removeClass('collect-stream')
+            .html('已收藏');
+    }
 }
 
 async function ajaxCancelCollectStream(id) {

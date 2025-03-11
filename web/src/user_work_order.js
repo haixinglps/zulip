@@ -2232,7 +2232,7 @@ async function render_all_work_order_list(isReload) {
 
     if(code === 200) {
         list.forEach((item) => {
-            item.endTime = item.endTime ? moment(item.endTime).format('YYYY-MM-DD HH:mm:ss') : '';
+            item.created = item.created ? moment(item.created).format('YYYY-MM-DD HH:mm:ss') : '';
         });
         const html = render_user_work_item({
             workList: list.length === 0 ? emptyList : list,
@@ -2240,6 +2240,7 @@ async function render_all_work_order_list(isReload) {
         });
 
         allWorkTotal = total;
+        $("#user-work-order-modal .ind-tab.first").html(`我参与的 ${total}`);
 
         if(isReload) {
             scroll_util.get_content_element($("#all-work-tab .work-list")).html(html);
@@ -2262,13 +2263,15 @@ async function render_my_work_order_list(isReload) {
 
     if(code === 200) {
         list.forEach((item) => {
-            item.endTime = item.endTime ? moment(item.endTime).format('YYYY-MM-DD HH:mm:ss') : '';
+            item.created = item.created ? moment(item.created).format('YYYY-MM-DD HH:mm:ss') : '';
+            item.isMy = true;
         });
         const html = render_user_work_item({
             workList: list.length === 0 ? emptyList : list,
-            isAll: list.length === 0
+            isAll: list.length === 0,
         });
 
+        $("#user-work-order-modal .ind-tab.last").html(`我发起的 ${total}`);
         myWorkTotal = total;
 
         if(isReload) {
@@ -2311,6 +2314,10 @@ export async function show_user_work_order(default_tab_key = "all-work-tab", sec
         callback(name, key) {
             $(".tabcontent").hide();
             $(`#${CSS.escape(key)}`).show();
+            if (!$("#my-work-tab .work-list").children().length) {
+                myWorkPage = 1;
+                render_my_work_order_list(true);
+            }
             switch (key) {
                 case "all-work-tab":
                     if (!$("#all-work-tab .work-list").children().length) {

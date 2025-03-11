@@ -25,7 +25,11 @@
                 {{#if isMy}}
                 <button class="button small rounded cancel-collect" data-id="{{id}}">取消收藏</button>
                 {{else}}
-                <button class="button small rounded collect-stream" data-id="{{id}}">收藏</button>
+                    {{#if favTag}}
+                    <button class="button small rounded" data-id="{{id}}">已收藏</button>
+                    {{else}}
+                    <button class="button small rounded collect-stream" data-id="{{id}}">收藏</button>
+                    {{/if}}
                 {{/if}}
                 <button class="button small rounded show-detail" data-id="{{id}}">查看详情</button>
             </div>
