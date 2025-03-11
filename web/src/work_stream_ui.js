@@ -661,7 +661,7 @@ export async function render_all_stream_list(isReload) {
     // allowed to know about and put them in the DOM, then we do
     // a second pass where we filter/sort them.
     const { code, result: { list , pages, total} } = await channel.get({
-        url: `https://rpa.insfair.cn/zmtapi/zmt/list?page=${allStreamPage}&size=${pageSize}`,
+        url: `https://rpa.insfair.cn/zmtapi/zmt/list?page=${allStreamPage}&size=${pageSize}&zulipUid=${page_params.user_id}`,
     });
 
     if(code === 200) {
