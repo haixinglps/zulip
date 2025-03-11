@@ -1323,7 +1323,7 @@ async function ajaxCollectStream(id) {
 
     if (code === 200) {
         $("#work_streams_overlay_container .streams-list")
-            .find(`button[data-id='${id}']`)
+            .find(`.collect-stream[data-id='${id}']`)
             .removeClass('collect-stream')
             .html('已收藏');
     }
