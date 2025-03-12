@@ -7,6 +7,7 @@ import render_user_stream_list_item from "../templates/user_stream_list_item.hbs
 import render_youfang_message from "../templates/youfang_message.hbs";
 import render_new_user_profile_top from "../templates/new_user_profile_top.hbs";
 import render_new_user_profile_content from "../templates/new_user_profile_content.hbs";
+import render_work_sku_info from "../templates/stream_settings/work_sku_info.hbs";
 
 import * as browser_history from "./browser_history";
 import * as buddy_data from "./buddy_data";
@@ -79,6 +80,7 @@ function format_user_group_list_item(group) {
     return render_user_group_list_item({
         group_id: group.id,
         name: group.name,
+        description: group.description,
     });
 }
 
@@ -287,7 +289,7 @@ export async function show_user_profile(user, default_tab_key = "profile-tab") {
 async function get_youfang_message(user) {
     let youfang_message = []
     const { code, result } = await channel.get({
-        url: "https://rpa.insfair.cn/zmtapi/zmt/list?page=1&size=5&zulipUid=" + user.user_id,
+        url: "https://rpa.insfair.cn/zmtapi/zmt/list?page=1&size=5&creator=" + user.user_id,
     });
 
     if(code === 200) {
@@ -422,6 +424,51 @@ function handle_remove_stream_subscription(target_user_id, sub, success, failure
     }
 }
 
+async function get_sku_tezheng(skuId) {
+    try {
+        const { code, result } = await channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/tezheng?skuId=${skuId}`,
+        });
+        return code === 200 ? result : null;
+    } catch (error) {
+        console.error('获取SKU特征失败:', error);
+        return null;
+    }
+}
+
+
+async function show_user_sku_section(id) {
+    const [skuDetail, skuTezheng] = await Promise.all([
+        channel.get({
+            url: `https://rpa.insfair.cn/zmtapi/sku/get?id=${id}`,
+        }),
+        get_sku_tezheng(id)
+    ]);
+
+    if (skuDetail.code === 200) {
+        if (skuDetail.result.skuUrl && typeof skuDetail.result.skuUrl === 'string') {
+            try {
+                skuDetail.result.skuUrl = JSON.parse(skuDetail.result.skuUrl);
+            } catch (e) {
+                console.error('skuUrl 解析失败:', e);
+                skuDetail.result.skuUrl = [];
+            }
+        } else {
+            skuDetail.result.skuUrl = [];
+        }
+
+        const html = render_work_sku_info({
+            detail: skuDetail.result,
+            tezheng: skuTezheng
+        });
+
+        $("#user_sku_info_tem").html(html);
+    }
+
+    $(".user-sku-info-right").addClass("show");
+    $(".user-sku-info-header").addClass("show");
+}
+
 export function register_click_handlers() {
     $("body").on("click", ".info_popover_actions .view_full_user_profile", (e) => {
         const user_id = popovers.elem_to_user_id($(e.target).parents("ul"));
@@ -537,6 +584,20 @@ export function register_click_handlers() {
 
     $("body").on("click", "#user-profile-modal .stream_list_item", () => {
         hide_user_profile();
+    });
+
+    $("body").on("click", "#user-profile-modal .show-profile-sku-detail", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $target = $(e.currentTarget);
+        const skuId = $target.data("sku-id");
+        show_user_sku_section(skuId);
+    });
+
+    $("body").on("click", "#user-profile-modal .fa-chevron-left", () => {
+        $(".user-sku-info-right").removeClass("show");
+        $(".user-sku-info-header").removeClass("show");
     });
 
     $("body").on("input", "#user-profile-streams-tab .stream-search", () => {

@@ -1,6 +1,13 @@
 <div class="micromodal" id="user-profile-modal" data-user-id="{{user_id}}" aria-hidden="true">
     <div class="modal__overlay" tabindex="-1">
         <div class="modal__container new-style" role="dialog" aria-modal="true" aria-labelledby="dialog_title">
+            <div class="subscriptions-header user-sku-info-header">
+                <div class="fa fa-chevron-left"></div>
+                <span class="subscriptions-title normal-title">商品服务详情</span>
+                <div class="exit">
+                    <button class="modal__close" aria-label="{{t 'Close modal' }}" data-micromodal-close></button>
+                </div>
+            </div>
             <div class="modal__header">
                 {{#unless is_bot}}
                 <div class="tippy-zulip-tooltip" data-tippy-content="{{last_seen}}">
@@ -21,7 +28,7 @@
 
                 {{#if groups_of_user.length}}
                     <div class="user-first-group">
-                        @{{groups_of_user.[0].name}}-{{groups_of_user.[0].description}}
+                        @{{groups_of_user.[0].name}} - {{groups_of_user.[0].description}}
                     </div>
                 {{/if}}
                 <button class="modal__close" aria-label="{{t 'Close modal' }}" data-micromodal-close></button>
@@ -48,7 +55,7 @@
                                         <div class="name">认证</div>
                                         {{!-- <div class="name">{{t "User groups" }}</div> --}}
                                         {{#each groups_of_user}}
-                                            <div class="value">{{this.description}}</div>
+                                            <div class="value">{{this.name}} - {{this.description}}</div>
                                         {{/each}}
                                     </div>
                                 {{/if}}
@@ -177,6 +184,10 @@
                 </ul>
             </footer>
             {{/unless}}
+
+            <div class="right user-sku-info-right">
+                <div id="user_sku_info_tem"></div>
+            </div>
         </div>
     </div>
 </div>
