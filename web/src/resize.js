@@ -39,7 +39,8 @@ function get_new_heights() {
         Number.parseInt($("#right-sidebar").css("paddingTop"), 10) -
         $("#userlist-header").safeOuterHeight(true) -
         $("#user_search_section").safeOuterHeight(true) -
-        right_sidebar_shortcuts_height;
+        right_sidebar_shortcuts_height -
+        150;
 
     res.buddy_list_wrapper_max_height = Math.max(80, usable_height);
 
