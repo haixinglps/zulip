@@ -1513,7 +1513,7 @@ class UserBaseSettings(models.Model):
     default_language = models.CharField(default="zh-hans", max_length=MAX_LANGUAGE_ID_LENGTH)
     # This setting controls which view is rendered first when Zulip loads.
     # Values for it are URL suffix after `#`.
-    default_view = models.TextField(default="recent_topics")
+    default_view = models.TextField(default="all_messages")#recent_topics
     escape_navigates_to_default_view = models.BooleanField(default=True)
     dense_mode = models.BooleanField(default=True)
     fluid_layout_width = models.BooleanField(default=False)
