@@ -414,7 +414,7 @@ export class MessageListData {
         return util.lower_bound(this._items, id, less_func);
     }
 
-    closest_id(id) {
+    closest_id(id, table_name) {
         // We directly keep track of local-only messages,
         // so if we're asked for one that we know we have,
         // just return it directly
@@ -472,6 +472,11 @@ export class MessageListData {
                 }
             }
         }
+
+        if (table_name === 'zhome') {
+            return id === 10000000000000000 ? items[items.length - closest].id : id;
+        }
+
         return items[closest].id;
     }
 
