@@ -1049,7 +1049,8 @@ def parse_anchor_value(anchor_val: Optional[str], use_first_unread_anchor: bool)
     if anchor_val == "oldest":
         return 0
     if anchor_val == "newest":
-        return LARGER_THAN_MAX_MESSAGE_ID
+        return -1
+        #LARGER_THAN_MAX_MESSAGE_ID
     if anchor_val == "first_unread":
         return None
     try:
@@ -1298,7 +1299,7 @@ def fetch_messages(
 
         # Set value that will be used to short circuit the after_query
         # altogether and avoid needless conditions in the before_query.
-        anchored_to_right = anchor >= LARGER_THAN_MAX_MESSAGE_ID
+        anchored_to_right = (anchor >= LARGER_THAN_MAX_MESSAGE_ID ||anchor == -1)
         if anchored_to_right:
             num_after = 0
 
@@ -1322,7 +1323,7 @@ def fetch_messages(
             .select_from(main_query)
             .order_by(column("message_id", Integer).asc())
         )
-        if anchored_to_right:
+        if anchor == -1:
             query = (
             select(*main_query.c)
             .select_from(main_query)
