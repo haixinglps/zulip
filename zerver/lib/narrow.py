@@ -1320,8 +1320,15 @@ def fetch_messages(
         query = (
             select(*main_query.c)
             .select_from(main_query)
-            #.order_by(column("message_id", Integer).asc())
+            .order_by(column("message_id", Integer).asc())
         )
+        if anchored_to_right:
+	    query = (
+            select(*main_query.c)
+            .select_from(main_query)
+            #.order_by(column("message_id", Integer).asc())
+            )
+
         # This is a hack to tag the query we use for testing
         query = query.prefix_with("/* get_messages */")
         rows = list(sa_conn.execute(query).fetchall())
