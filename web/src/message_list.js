@@ -113,7 +113,11 @@ export class MessageList {
         }
 
         if (bottom_messages.length > 0) {
-            render_info = this.append_to_view(bottom_messages, opts);
+            if (this.table_name === "zhome") {
+                render_info = this.prepend_to_view(bottom_messages, opts);
+            } else{
+                render_info = this.append_to_view(bottom_messages, opts);
+            }
         }
 
         if (this.narrowed && !this.visibly_empty()) {
@@ -256,7 +260,7 @@ export class MessageList {
 
         id = convert_id(id);
 
-        const closest_id = this.closest_id(id);
+        const closest_id = this.closest_id(id, this.table_name);
 
         let error_data;
 
@@ -306,8 +310,8 @@ export class MessageList {
         return this.get_row(this.data.selected_id());
     }
 
-    closest_id(id) {
-        return this.data.closest_id(id);
+    closest_id(id, table_name) {
+        return this.data.closest_id(id, table_name);
     }
 
     advance_past_messages(msg_ids) {
@@ -369,6 +373,12 @@ export class MessageList {
     append_to_view(messages, {messages_are_new = false} = {}) {
         this.num_appends += 1;
         const render_info = this.view.append(messages, messages_are_new);
+        return render_info;
+    }
+
+    prepend_to_view(messages, {messages_are_new = false} = {}) {
+        this.num_appends += 1;
+        const render_info = this.view.prepend(messages, messages_are_new);
         return render_info;
     }
 

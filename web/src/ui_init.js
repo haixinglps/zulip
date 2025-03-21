@@ -710,7 +710,7 @@ export function initialize_everything() {
     // 工作流相关
     work_stream_ui.initialize();
     work_sku_ui.initialize();
-    
+
     user_group_settings_ui.initialize();
     top_left_corner.initialize();
     stream_list.initialize({
