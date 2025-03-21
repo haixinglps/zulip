@@ -1299,7 +1299,7 @@ def fetch_messages(
 
         # Set value that will be used to short circuit the after_query
         # altogether and avoid needless conditions in the before_query.
-        anchored_to_right = (anchor >= LARGER_THAN_MAX_MESSAGE_ID ||anchor == -1)
+        anchored_to_right = (anchor >= LARGER_THAN_MAX_MESSAGE_ID or anchor == -1)
         if anchored_to_right:
             num_after = 0
 
