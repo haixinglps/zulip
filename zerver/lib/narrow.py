@@ -1287,6 +1287,10 @@ def fetch_messages(
     )
 
     with get_sqlalchemy_connection() as sa_conn:
+        narrowLen=len(narrow) if narrow is not None else 0
+        noLoginNewest=0;
+        if ( anchor is None && narrowLen==1):
+            noLoginNewest=1;
         if anchor is None:
             # `anchor=None` corresponds to the anchor="first_unread" parameter.
             anchor = find_first_unread_anchor(
@@ -1323,7 +1327,7 @@ def fetch_messages(
             .select_from(main_query)
             .order_by(column("message_id", Integer).asc())
         )
-        if anchor == -1:
+        if (anchor == -1 or noLoginNewest==1):
             query = (
             select(*main_query.c)
             .select_from(main_query)
