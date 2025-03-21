@@ -1323,7 +1323,7 @@ def fetch_messages(
             .order_by(column("message_id", Integer).asc())
         )
         if anchored_to_right:
-	    query = (
+            query = (
             select(*main_query.c)
             .select_from(main_query)
             #.order_by(column("message_id", Integer).asc())
