@@ -1289,7 +1289,7 @@ def fetch_messages(
     with get_sqlalchemy_connection() as sa_conn:
         narrowLen=len(narrow) if narrow is not None else 0
         noLoginNewest=0;
-        if ( anchor is None and narrowLen==1):
+        if ( anchor is None and narrowLen<=1):
             noLoginNewest=1;
         if anchor is None:
             # `anchor=None` corresponds to the anchor="first_unread" parameter.
