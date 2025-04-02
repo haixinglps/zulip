@@ -3,6 +3,7 @@
        they look nice next to blockquotes, lists, etc. */
     & p {
         margin: 3px 0;
+        text-align: justify;
     }
 
     /* The spacing between two paragraphs is significantly larger.  We

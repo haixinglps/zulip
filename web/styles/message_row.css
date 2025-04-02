@@ -165,6 +165,9 @@ $time_column_max_width: 150px;
 
             @media (width < $sm_min) {
                 padding: 0 4px;
+                position: absolute !important;
+                right: 80px;
+                width: 40px;
 
                 /* This is intended to target the first message_controls child
                    when there are 3 displayed. 4 = 3 + hidden message_failed element. */
@@ -266,6 +269,7 @@ $time_column_max_width: 150px;
         */
         .messagebox .messagebox-content {
             grid-template-rows: 25px repeat(3, auto);
+            position: relative;
 
             .message_content {
                 padding-top: 0;
@@ -276,6 +280,12 @@ $time_column_max_width: 150px;
                 align-self: center;
                 position: unset;
                 margin-top: 1px;
+
+                @media (width < $sm_min) {
+                    position: absolute;
+                    right: 20px;
+                    width: 60px;
+                }
             }
 
             .slow-send-spinner {
