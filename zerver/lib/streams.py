@@ -432,6 +432,8 @@ def access_stream_by_id(
 
 def get_public_streams_queryset(realm: Realm) -> QuerySet[Stream]:
     return Stream.objects.filter(realm=realm, invite_only=False, history_public_to_subscribers=True)
+def get_recommend_streams_queryset(realm: Realm) -> QuerySet[Stream]:
+    return Stream.objects.filter(realm=realm, invite_only=False, recommend=1)
 
 
 def get_web_public_streams_queryset(realm: Realm) -> QuerySet[Stream]:

@@ -56,6 +56,7 @@ from zerver.lib.streams import (
     get_public_streams_queryset,
     get_stream_by_narrow_operand_access_unchecked,
     get_web_public_streams_queryset,
+    get_recommend_streams_queryset,
 )
 from zerver.lib.topic import (
     RESOLVED_TOPIC_PREFIX,
@@ -446,6 +447,8 @@ class NarrowBuilder:
             recipient_queryset = get_public_streams_queryset(self.realm)
         elif operand == "web-public":
             recipient_queryset = get_web_public_streams_queryset(self.realm)
+        elif operand == "recommend":
+            recipient_queryset = get_recommend_streams_queryset(self.realm)
         else:
             raise BadNarrowOperatorError("unknown streams operand " + operand)
 
@@ -1236,7 +1239,12 @@ class FetchedMessages(LimitedMessages[Row]):
     include_history: bool
     is_search: bool
 
-
+# 判断列表中是否存在 operator 为 "streams" 的字典
+def has_operator_stream(data_list):
+    for item in data_list:
+        if item.get("operator") == "stream":
+            return True
+    return False
 def fetch_messages(
     *,
     narrow: OptionalNarrowListT,
@@ -1276,6 +1284,16 @@ def fetch_messages(
         need_message=need_message,
         need_user_message=need_user_message,
     )
+    #narrowLen=len(narrow) if narrow is not None else 0
+    #noLoginNewest=0;
+    if ( has_operator_stream(narrow)==False):
+        #noLoginNewest=1
+        if ( user_profile is not None ):
+            recommend_term = dict(
+                operator="streams",
+                operand="recommend",
+            )
+            narrow.append(recommend_term)
 
     query, is_search = add_narrow_conditions(
         user_profile=user_profile,
@@ -1287,10 +1305,7 @@ def fetch_messages(
     )
 
     with get_sqlalchemy_connection() as sa_conn:
-        narrowLen=len(narrow) if narrow is not None else 0
-        noLoginNewest=0;
-        if ( anchor is None and narrowLen<=1):
-            noLoginNewest=1;
+        
         if anchor is None:
             # `anchor=None` corresponds to the anchor="first_unread" parameter.
             anchor = find_first_unread_anchor(
@@ -1327,7 +1342,7 @@ def fetch_messages(
             .select_from(main_query)
             .order_by(column("message_id", Integer).asc())
         )
-        if (anchor == -1 or noLoginNewest==1):
+        if (has_operator_stream(narrow)==False):
             query = (
             select(*main_query.c)
             .select_from(main_query)
