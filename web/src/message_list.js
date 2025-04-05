@@ -89,7 +89,7 @@ export class MessageList {
         this.reading_prevented = false;
     }
 
-    add_messages(messages, opts) {
+    add_messages(messages, opts, tab_name = "zhome") {
         // This adds all messages to our data, but only returns
         // the currently viewable ones.
         const info = this.data.add_messages(messages);
@@ -113,7 +113,7 @@ export class MessageList {
         }
 
         if (bottom_messages.length > 0) {
-            if (this.table_name === "zhome") {
+            if (tab_name === "zhome") {
                 render_info = this.prepend_to_view(bottom_messages, opts);
             } else{
                 render_info = this.append_to_view(bottom_messages, opts);

@@ -22,8 +22,7 @@ export function add_messages(messages, msg_list, opts) {
     }
 
     loading.destroy_indicator($("#page_loading_indicator"));
-
-    const render_info = msg_list.add_messages(messages, opts);
+    const render_info = msg_list.add_messages(messages, opts, msg_list.table_name);
 
     return render_info;
 }

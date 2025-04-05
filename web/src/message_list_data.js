@@ -473,7 +473,7 @@ export class MessageListData {
             }
         }
 
-        if (table_name === 'zhome') {
+        if (table_name === 'zhome' || table_name === 'zfilt') {
             return id === 10000000000000000 ? items[items.length - closest].id : id;
         }
 

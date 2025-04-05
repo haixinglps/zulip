@@ -794,7 +794,7 @@ export class MessageListView {
                 list === message_lists.current &&
                 orig_scrolltop_offset !== undefined
             ) {
-                list.view.set_message_offset(orig_scrolltop_offset);
+                list.view.set_message_offset(-orig_scrolltop_offset);
                 list.reselect_selected_id();
             }
         };
@@ -1174,7 +1174,7 @@ export class MessageListView {
         // viewable window and the selected message
         this.clear_table();
         this.render(
-            this.list.all_messages().slice(this._render_win_start, this._render_win_end),
+            (message_lists.current.table_name === 'zfilt' && target_offset) ? this.list.all_messages().slice(this._render_win_start, this._render_win_end) : this.list.all_messages().slice(this._render_win_start, this._render_win_end).reverse(), // 反向消息
             "bottom",
         );
 
@@ -1189,6 +1189,10 @@ export class MessageListView {
 
             this.set_message_offset(target_offset);
         }
+
+        // if (message_lists.current.table_name === 'zfilt') {
+        //     this.set_message_offset(0);
+        // }
     }
 
     _find_message_group(message_group_id) {

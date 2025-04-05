@@ -418,6 +418,9 @@ export function initialize_kitchen_sink_stuff() {
     });
 
     $(document).on("message_selected.zulip", (event) => {
+        if (event.msg_list.table_name === 'zfilt') {
+            return;
+        }
         if (message_lists.current !== event.msg_list) {
             return;
         }
