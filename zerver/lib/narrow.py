@@ -1241,6 +1241,8 @@ class FetchedMessages(LimitedMessages[Row]):
 
 # 判断列表中是否存在 operator 为 "streams" 的字典
 def has_operator_stream(data_list):
+    if data_list is None:
+        return False
     for item in data_list:
         if item.get("operator") == "stream":
             return True
