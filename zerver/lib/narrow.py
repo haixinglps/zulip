@@ -1295,6 +1295,8 @@ def fetch_messages(
                 operator="streams",
                 operand="recommend",
             )
+            if narrow is None:
+                narrow=[]
             narrow.append(recommend_term)
 
     query, is_search = add_narrow_conditions(
