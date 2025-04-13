@@ -1360,7 +1360,7 @@ def fetch_messages(
             query = (
             select(*main_query.c)
             .select_from(main_query)
-            .order_by(column("message_id", Integer).asc())
+            #.order_by(column("message_id", Integer).asc())
             )
 
         # This is a hack to tag the query we use for testing
