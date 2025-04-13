@@ -1258,6 +1258,16 @@ def fetch_messages(
     num_before: int,
     num_after: int,
 ) -> FetchedMessages:
+    if ( has_operator_stream(narrow)==False):
+        #noLoginNewest=1
+        if ( user_profile is not None ):
+            recommend_term = dict(
+                operator="streams",
+                operand="recommend",
+            )
+            if narrow is None:
+                narrow=[]
+            narrow.append(recommend_term)
     include_history = ok_to_include_history(narrow, user_profile, is_web_public_query)
     if include_history:
         # The initial query in this case doesn't use `zerver_usermessage`,
@@ -1288,16 +1298,16 @@ def fetch_messages(
     )
     #narrowLen=len(narrow) if narrow is not None else 0
     #noLoginNewest=0;
-    if ( has_operator_stream(narrow)==False):
+    #if ( has_operator_stream(narrow)==False):
         #noLoginNewest=1
-        if ( user_profile is not None ):
-            recommend_term = dict(
-                operator="streams",
-                operand="recommend",
-            )
-            if narrow is None:
-                narrow=[]
-            narrow.append(recommend_term)
+        #if ( user_profile is not None ):
+            #recommend_term = dict(
+                #operator="streams",
+                #operand="recommend",
+            #)
+            #if narrow is None:
+                #narrow=[]
+            #narrow.append(recommend_term)
 
     query, is_search = add_narrow_conditions(
         user_profile=user_profile,
@@ -1350,7 +1360,7 @@ def fetch_messages(
             query = (
             select(*main_query.c)
             .select_from(main_query)
-            #.order_by(column("message_id", Integer).asc())
+            .order_by(column("message_id", Integer).asc())
             )
 
         # This is a hack to tag the query we use for testing
